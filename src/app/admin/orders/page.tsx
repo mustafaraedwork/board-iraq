@@ -2,6 +2,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { 
   Package, 
   Eye, 
@@ -16,8 +17,11 @@ import {
   Clock,
   Truck,
   XCircle,
-  RefreshCw
+  RefreshCw,
+  Shield,
+  Loader2
 } from 'lucide-react';
+import { AuthService, AdminService } from '@/lib/utils';
 
 interface Order {
   id: string;
@@ -48,6 +52,13 @@ interface OrdersResponse {
 }
 
 export default function AdminOrdersPage() {
+  const router = useRouter();
+  
+  // حالات فحص الصلاحيات
+  const [isLoadingPermissions, setIsLoadingPermissions] = useState(true);
+  const [hasAdminAccess, setHasAdminAccess] = useState(false);
+
+  // حالات البيانات
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -83,6 +94,44 @@ export default function AdminOrdersPage() {
     { value: 'cancelled', label: 'ملغى', color: 'red' }
   ];
 
+  // فحص صلاحيات الأدمن
+  const checkAdminPermissions = async () => {
+    try {
+      setIsLoadingPermissions(true);
+      
+      const currentUser = AuthService.getUser();
+      if (!currentUser) {
+        router.push('/login');
+        return;
+      }
+
+      const isAdmin = await AdminService.checkCurrentUserAdmin();
+      if (!isAdmin) {
+        router.push('/unauthorized');
+        return;
+      }
+
+      setHasAdminAccess(true);
+      await fetchOrders(); // بدء تحميل البيانات بعد التأكد من الصلاحيات
+      
+    } catch (error) {
+      console.error('خطأ في فحص الصلاحيات:', error);
+      router.push('/unauthorized');
+    } finally {
+      setIsLoadingPermissions(false);
+    }
+  };
+
+  useEffect(() => {
+    checkAdminPermissions();
+  }, []);
+
+  useEffect(() => {
+    if (hasAdminAccess) {
+      fetchOrders();
+    }
+  }, [currentPage, statusFilter, governorateFilter, hasAdminAccess]);
+
   const getStatusIcon = (status: string) => {
     switch (status) {
       case 'pending': return <Clock className="h-4 w-4" />;
@@ -106,6 +155,8 @@ export default function AdminOrdersPage() {
   };
 
   const fetchOrders = async () => {
+    if (!hasAdminAccess) return;
+    
     setLoading(true);
     setError('');
     
@@ -191,9 +242,25 @@ export default function AdminOrdersPage() {
     link.click();
   };
 
-  useEffect(() => {
-    fetchOrders();
-  }, [currentPage, statusFilter, governorateFilter]);
+  // شاشة تحميل فحص الصلاحيات
+  if (isLoadingPermissions) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center" dir="rtl">
+        <div className="text-center">
+          <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <Shield className="h-8 w-8 text-blue-600" />
+          </div>
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">فحص صلاحيات الوصول لإدارة الطلبات...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // إذا لم يكن المستخدم أدمن، لا تعرض شيء (سيتم التوجيه)
+  if (!hasAdminAccess) {
+    return null;
+  }
 
   return (
     <div className="min-h-screen bg-gray-50 py-8 px-4" dir="rtl">
@@ -202,11 +269,16 @@ export default function AdminOrdersPage() {
         {/* Header */}
         <div className="bg-white rounded-2xl shadow-lg p-6 mb-8">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-            <div>
-              <h1 className="text-2xl font-bold text-gray-900 mb-2">
-                إدارة الطلبات
-              </h1>
-              <p className="text-gray-600">متابعة وإدارة طلبات البطاقات الذكية</p>
+            <div className="flex items-center space-x-3 space-x-reverse">
+              <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
+                <Shield className="h-5 w-5 text-green-600" />
+              </div>
+              <div>
+                <h1 className="text-2xl font-bold text-gray-900 mb-2">
+                  إدارة الطلبات - المشرفين فقط
+                </h1>
+                <p className="text-gray-600">متابعة وإدارة طلبات البطاقات الذكية</p>
+              </div>
             </div>
             
             <div className="flex gap-3">
@@ -224,6 +296,13 @@ export default function AdminOrdersPage() {
               >
                 <Download className="h-4 w-4 ml-2" />
                 تصدير
+              </button>
+
+              <button
+                onClick={() => router.push('/admin')}
+                className="flex items-center px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors"
+              >
+                ← العودة للوحة الإدارة
               </button>
             </div>
           </div>
