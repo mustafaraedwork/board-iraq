@@ -299,7 +299,7 @@ END:VCARD`;
           </div>
         </div>
 
-        {/* قائمة الروابط */}
+        {/* قائمة الروابط - محدثة مع النص في المنتصف */}
         <div className="px-6 pb-8">
           <div className="space-y-4">
             {links.map((link, index) => (
@@ -317,14 +317,16 @@ END:VCARD`;
                     backgroundColor: user.button_color || '#D97757'
                   }}
                 >
-                  {/* أيقونة ونص الرابط */}
-                  <div className="flex items-center space-x-4">
-                    <div 
-                      className="opacity-90"
-                      style={{ color: autoTextColor }}
-                    >
-                      {getPlatformIcon(link.platform || '', link.type)}
-                    </div>
+                  {/* الأيقونة على اليمين */}
+                  <div 
+                    className="opacity-90"
+                    style={{ color: autoTextColor }}
+                  >
+                    {getPlatformIcon(link.platform || '', link.type)}
+                  </div>
+
+                  {/* النص في المنتصف */}
+                  <div className="flex-1 text-center">
                     <span 
                       className="font-medium text-base"
                       style={{ color: autoTextColor }}
@@ -333,13 +335,10 @@ END:VCARD`;
                     </span>
                   </div>
 
-                  {/* أيقونة القائمة للرابط */}
-                  <button 
-                    className="transition-colors opacity-60 hover:opacity-80"
-                    style={{ color: autoTextColor }}
-                  >
+                  {/* فراغ للموازنة مع الجانب الآخر */}
+                  <div className="w-5 opacity-0">
                     <MoreHorizontal className="h-5 w-5" />
-                  </button>
+                  </div>
                 </div>
               </a>
             ))}
@@ -367,7 +366,7 @@ END:VCARD`;
               className="font-medium text-center"
               style={{ color: autoTextColor, opacity: 0.9 }}
             >
-              ⚡ انضم إلى {user.username} على لينكتري ⚡
+              ⚡ إذا أعجبك الكارد اطلبه من هنا ⚡
             </span>
           </div>
         </a>
