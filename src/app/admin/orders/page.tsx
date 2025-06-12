@@ -282,7 +282,7 @@ export default function AdminOrdersPage() {
         <div className="rounded-2xl shadow-lg p-6 mb-8 border-0" style={{ backgroundColor: 'rgba(255, 255, 255, 0.9)' }}>
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div className="flex items-center gap-3">
-              <img src="/logo.svg" alt="Board Iraq" className="w-10 h-10" />
+              <img src="/logo.svg" alt="Board Iraq" className="w-18 h-10" />
               <div>
                 <h1 className="text-2xl font-bold mb-2" style={{ color: '#141413' }}>
                   إدارة الطلبات - المشرفين فقط
