@@ -1,4 +1,4 @@
-// src/app/dashboard/page.tsx
+// src/app/dashboard/page.tsx - محدث بالهوية البصرية الجديدة مع الاحتفاظ على جميع الوظائف
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -18,7 +18,8 @@ import {
   MousePointer,
   Trash2,
   ExternalLink,
-  GripVertical
+  GripVertical,
+  Copy
 } from 'lucide-react';
 import { 
   DndContext, 
@@ -69,8 +70,12 @@ function SortableLink({ link, onDelete }: SortableLinkProps) {
   return (
     <div
       ref={setNodeRef}
-      style={style}
-      className={`flex items-center justify-between p-4 border border-gray-200 rounded-lg group hover:border-gray-300 bg-white ${
+      style={{
+        ...style,
+        borderColor: 'rgba(217, 151, 87, 0.3)',
+        backgroundColor: 'rgba(255, 255, 255, 0.9)'
+      }}
+      className={`flex items-center justify-between p-4 border rounded-lg group hover:shadow-md transition-all ${
         isDragging ? 'shadow-lg' : ''
       }`}
     >
@@ -82,7 +87,10 @@ function SortableLink({ link, onDelete }: SortableLinkProps) {
         >
           <GripVertical className="h-4 w-4 text-gray-400" />
         </div>
-        <div className="w-10 h-10 bg-orange-500 rounded-full flex items-center justify-center">
+        <div 
+          className="w-10 h-10 rounded-full flex items-center justify-center"
+          style={{ backgroundColor: '#D97757' }}
+        >
           <span className="text-white text-sm">
             {link.type === 'phone' ? '📱' : 
              link.type === 'email' ? '✉️' : 
@@ -94,23 +102,24 @@ function SortableLink({ link, onDelete }: SortableLinkProps) {
           </span>
         </div>
         <div className="flex-1">
-          <p className="font-medium">{link.title}</p>
-          <p className="text-sm text-gray-600">{link.type} • {link.url}</p>
-          <p className="text-xs text-gray-500">تم النقر {link.click_count} مرة</p>
+          <p className="font-medium" style={{ color: '#141413' }}>{link.title}</p>
+          <p className="text-sm" style={{ color: '#141413', opacity: 0.7 }}>{link.type} • {link.url}</p>
+          <p className="text-xs" style={{ color: '#141413', opacity: 0.5 }}>تم النقر {link.click_count} مرة</p>
         </div>
       </div>
       <div className="flex items-center space-x-2 space-x-reverse opacity-0 group-hover:opacity-100 transition-opacity">
-        <Button size="sm" variant="outline">
+        <Button size="sm" variant="outline" style={{ borderColor: '#D97757', color: '#D97757' }}>
           <Edit className="h-3 w-3" />
         </Button>
         <Button 
           size="sm" 
           variant="outline"
           onClick={() => onDelete(link.id)}
+          style={{ borderColor: '#dc2626', color: '#dc2626' }}
         >
           <Trash2 className="h-3 w-3" />
         </Button>
-        <Button size="sm" variant="outline">
+        <Button size="sm" variant="outline" style={{ borderColor: '#D97757', color: '#D97757' }}>
           <ExternalLink className="h-3 w-3" />
         </Button>
       </div>
@@ -323,12 +332,39 @@ export default function DashboardPage() {
     }
   };
 
+  const copyProfileLink = async () => {
+    if (!user) return;
+    
+    const profileUrl = `boardiraq.com/${user.username}`;
+    
+    try {
+      await navigator.clipboard.writeText(profileUrl);
+      alert('تم نسخ الرابط بنجاح!');
+    } catch (error) {
+      // Fallback للمتصفحات القديمة
+      const textArea = document.createElement('textarea');
+      textArea.value = profileUrl;
+      document.body.appendChild(textArea);
+      textArea.select();
+      document.execCommand('copy');
+      document.body.removeChild(textArea);
+      alert('تم نسخ الرابط بنجاح!');
+    }
+  };
+
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center" dir="rtl">
+      <div 
+        className="min-h-screen flex items-center justify-center" 
+        style={{ backgroundColor: '#F0EEE6' }}
+        dir="rtl"
+      >
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">جاري التحميل...</p>
+          <div 
+            className="animate-spin rounded-full h-12 w-12 border-b-2 mx-auto mb-4"
+            style={{ borderColor: '#D97757' }}
+          ></div>
+          <p style={{ color: '#141413' }}>جاري التحميل...</p>
         </div>
       </div>
     );
@@ -336,10 +372,18 @@ export default function DashboardPage() {
 
   if (!user) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center" dir="rtl">
+      <div 
+        className="min-h-screen flex items-center justify-center" 
+        style={{ backgroundColor: '#F0EEE6' }}
+        dir="rtl"
+      >
         <div className="text-center">
           <p className="text-red-600 mb-4">لم يتم العثور على المستخدم</p>
-          <Button onClick={() => router.push('/login')}>
+          <Button 
+            onClick={() => router.push('/login')}
+            className="text-white border-0"
+            style={{ backgroundColor: '#D97757' }}
+          >
             تسجيل الدخول
           </Button>
         </div>
@@ -348,16 +392,29 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50" dir="rtl">
+    <div className="min-h-screen" style={{ backgroundColor: '#F0EEE6' }} dir="rtl">
       {/* Header */}
-      <header className="bg-white shadow-sm">
+      <header 
+        className="shadow-sm"
+        style={{ backgroundColor: 'rgba(255, 255, 255, 0.9)' }}
+      >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-4">
-            <h1 className="text-2xl font-bold text-gray-900">
-              مرحباً، {user.full_name || user.username}
-            </h1>
+            <div className="flex items-center">
+              <img 
+                src="/logo.svg" 
+                alt="Board Iraq Logo" 
+                className="h-10 w-auto"
+              />
+            </div>
             <div className="flex items-center space-x-4 space-x-reverse">
-              <Button variant="outline" size="sm" onClick={openProfile}>
+              <Button 
+                variant="outline" 
+                size="sm" 
+                onClick={openProfile}
+                style={{ borderColor: '#D97757', color: '#D97757' }}
+                className="ml-2"
+              >
                 <Eye className="h-4 w-4 ml-2" />
                 معاينة الصفحة
               </Button>
@@ -365,6 +422,7 @@ export default function DashboardPage() {
                 variant="outline" 
                 size="sm"
                 onClick={handleLogout}
+                style={{ borderColor: '#141413', color: '#141413' }}
               >
                 تسجيل الخروج
               </Button>
@@ -376,43 +434,52 @@ export default function DashboardPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          <Card>
+          <Card 
+            className="border-0 shadow-md"
+            style={{ backgroundColor: 'rgba(255, 255, 255, 0.9)' }}
+          >
             <CardContent className="p-6">
               <div className="flex items-center">
                 <div className="flex-shrink-0">
-                  <Users className="h-8 w-8 text-blue-600" />
+                  <Users className="h-8 w-8" style={{ color: '#D97757' }} />
                 </div>
                 <div className="mr-4 flex-1">
-                  <p className="text-sm font-medium text-gray-600">إجمالي الزيارات</p>
-                  <p className="text-2xl font-bold text-gray-900">{user.total_visits}</p>
+                  <p className="text-sm font-medium" style={{ color: '#141413', opacity: 0.7 }}>إجمالي الزيارات</p>
+                  <p className="text-2xl font-bold" style={{ color: '#141413' }}>{user.total_visits}</p>
                 </div>
               </div>
             </CardContent>
           </Card>
 
-          <Card>
+          <Card 
+            className="border-0 shadow-md"
+            style={{ backgroundColor: 'rgba(255, 255, 255, 0.9)' }}
+          >
             <CardContent className="p-6">
               <div className="flex items-center">
                 <div className="flex-shrink-0">
-                  <MousePointer className="h-8 w-8 text-green-600" />
+                  <MousePointer className="h-8 w-8" style={{ color: '#10b981' }} />
                 </div>
                 <div className="mr-4 flex-1">
-                  <p className="text-sm font-medium text-gray-600">إجمالي النقرات</p>
-                  <p className="text-2xl font-bold text-gray-900">{user.total_clicks}</p>
+                  <p className="text-sm font-medium" style={{ color: '#141413', opacity: 0.7 }}>إجمالي النقرات</p>
+                  <p className="text-2xl font-bold" style={{ color: '#141413' }}>{user.total_clicks}</p>
                 </div>
               </div>
             </CardContent>
           </Card>
 
-          <Card>
+          <Card 
+            className="border-0 shadow-md"
+            style={{ backgroundColor: 'rgba(255, 255, 255, 0.9)' }}
+          >
             <CardContent className="p-6">
               <div className="flex items-center">
                 <div className="flex-shrink-0">
-                  <BarChart3 className="h-8 w-8 text-purple-600" />
+                  <BarChart3 className="h-8 w-8" style={{ color: '#8b5cf6' }} />
                 </div>
                 <div className="mr-4 flex-1">
-                  <p className="text-sm font-medium text-gray-600">عدد الروابط</p>
-                  <p className="text-2xl font-bold text-gray-900">{links.length}</p>
+                  <p className="text-sm font-medium" style={{ color: '#141413', opacity: 0.7 }}>عدد الروابط</p>
+                  <p className="text-2xl font-bold" style={{ color: '#141413' }}>{links.length}</p>
                 </div>
               </div>
             </CardContent>
@@ -421,11 +488,22 @@ export default function DashboardPage() {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Profile Card */}
-          <Card>
+          <Card 
+            className="border-0 shadow-md"
+            style={{ backgroundColor: 'rgba(255, 255, 255, 0.9)' }}
+          >
             <CardHeader>
-              <CardTitle className="flex items-center justify-between">
+              <CardTitle 
+                className="flex items-center justify-between"
+                style={{ color: '#141413' }}
+              >
                 معلومات الملف الشخصي
-                <Button size="sm" variant="outline" onClick={() => setShowEditProfile(true)}>
+                <Button 
+                  size="sm" 
+                  variant="outline" 
+                  onClick={() => setShowEditProfile(true)}
+                  style={{ borderColor: '#D97757', color: '#D97757' }}
+                >
                   <Edit className="h-4 w-4 ml-2" />
                   تعديل
                 </Button>
@@ -433,27 +511,43 @@ export default function DashboardPage() {
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="flex items-center space-x-4 space-x-reverse">
-                <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center">
+                <div 
+                  className="w-16 h-16 rounded-full flex items-center justify-center"
+                  style={{ 
+                    background: 'linear-gradient(135deg, #D97757 0%, #a8563f 100%)'
+                  }}
+                >
                   <span className="text-white text-xl font-bold">
                     {user.full_name?.charAt(0) || user.username.charAt(0)}
                   </span>
                 </div>
                 <div className="flex-1">
-                  <h3 className="text-lg font-semibold">{user.full_name || user.username}</h3>
-                  <p className="text-gray-600">{user.job_title}</p>
-                  <p className="text-sm text-gray-500">{user.company}</p>
+                  <h3 className="text-lg font-semibold" style={{ color: '#141413' }}>
+                    {user.full_name || user.username}
+                  </h3>
+                  <p style={{ color: '#141413', opacity: 0.7 }}>{user.job_title}</p>
+                  <p className="text-sm" style={{ color: '#141413', opacity: 0.5 }}>{user.company}</p>
                 </div>
               </div>
               
-              <div className="border-t pt-4">
+              <div className="border-t pt-4" style={{ borderColor: 'rgba(217, 151, 87, 0.2)' }}>
                 <div className="grid grid-cols-2 gap-4 text-sm">
                   <div>
-                    <p className="text-gray-600">اسم المستخدم</p>
-                    <p className="font-medium">{user.username}</p>
+                    <p style={{ color: '#141413', opacity: 0.7 }}>اسم المستخدم</p>
+                    <p className="font-medium" style={{ color: '#141413' }}>{user.username}</p>
                   </div>
                   <div>
-                    <p className="text-gray-600">رابط الصفحة</p>
-                    <p className="font-medium text-blue-600">boardiraq.com/{user.username}</p>
+                    <p style={{ color: '#141413', opacity: 0.7 }}>رابط الصفحة</p>
+                    <div className="flex items-center space-x-2 space-x-reverse">
+                      <p className="font-medium" style={{ color: '#D97757' }}>boardiraq.com/{user.username}</p>
+                      <button 
+                        onClick={copyProfileLink}
+                        className="p-1 rounded hover:bg-gray-100 transition-colors"
+                        title="نسخ الرابط"
+                      >
+                        <Copy className="h-3 w-3" style={{ color: '#D97757' }} />
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -461,31 +555,47 @@ export default function DashboardPage() {
           </Card>
 
           {/* QR Code Card */}
-          <Card>
+          <Card 
+            className="border-0 shadow-md"
+            style={{ backgroundColor: 'rgba(255, 255, 255, 0.9)' }}
+          >
             <CardHeader>
-              <CardTitle className="flex items-center">
-                <QrCode className="h-5 w-5 ml-2" />
+              <CardTitle 
+                className="flex items-center"
+                style={{ color: '#141413' }}
+              >
+                <QrCode className="h-5 w-5 ml-2" style={{ color: '#D97757' }} />
                 كود QR الخاص بك
               </CardTitle>
             </CardHeader>
             <CardContent className="text-center space-y-4">
-              <div className="w-48 h-48 bg-white border border-gray-200 rounded-lg mx-auto flex items-center justify-center p-4">
+              <div 
+                className="w-48 h-48 border rounded-lg mx-auto flex items-center justify-center p-4"
+                style={{ 
+                  backgroundColor: 'white',
+                  borderColor: 'rgba(217, 151, 87, 0.3)'
+                }}
+              >
                 {qrCodeUrl ? (
                   <img src={qrCodeUrl} alt="QR Code" className="w-full h-full object-contain" />
                 ) : (
                   <div className="text-center">
-                    <QrCode className="h-12 w-12 text-gray-400 mx-auto mb-2" />
-                    <p className="text-sm text-gray-500">جاري إنشاء الكود...</p>
+                    <QrCode className="h-12 w-12 mx-auto mb-2" style={{ color: '#D97757' }} />
+                    <p className="text-sm" style={{ color: '#141413', opacity: 0.5 }}>جاري إنشاء الكود...</p>
                   </div>
                 )}
               </div>
               
               <div className="space-y-2">
-                <Button className="w-full" variant="outline" onClick={downloadQRCode}>
+                <Button 
+                  className="w-full text-white border-0" 
+                  onClick={downloadQRCode}
+                  style={{ backgroundColor: '#D97757' }}
+                >
                   <Download className="h-4 w-4 ml-2" />
                   تحميل كود QR
                 </Button>
-                <p className="text-xs text-gray-500">
+                <p className="text-xs" style={{ color: '#141413', opacity: 0.5 }}>
                   هذا هو الكود المطبوع على بطاقتك
                 </p>
               </div>
@@ -494,11 +604,22 @@ export default function DashboardPage() {
         </div>
 
         {/* Links Section */}
-        <Card className="mt-8">
+        <Card 
+          className="mt-8 border-0 shadow-md"
+          style={{ backgroundColor: 'rgba(255, 255, 255, 0.9)' }}
+        >
           <CardHeader>
-            <CardTitle className="flex items-center justify-between">
+            <CardTitle 
+              className="flex items-center justify-between"
+              style={{ color: '#141413' }}
+            >
               الروابط والمعلومات ({links.length})
-              <Button size="sm" onClick={() => setShowAddForm(true)}>
+              <Button 
+                size="sm" 
+                onClick={() => setShowAddForm(true)}
+                className="text-white border-0"
+                style={{ backgroundColor: '#D97757' }}
+              >
                 <Plus className="h-4 w-4 ml-2" />
                 إضافة رابط
               </Button>
@@ -522,10 +643,17 @@ export default function DashboardPage() {
                     ))}
                   </SortableContext>
                 ) : (
-                  <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center">
-                    <Plus className="h-8 w-8 text-gray-400 mx-auto mb-2" />
-                    <p className="text-gray-500 mb-2">لا توجد روابط بعد</p>
-                    <Button variant="outline" onClick={() => setShowAddForm(true)}>
+                  <div 
+                    className="border-2 border-dashed rounded-lg p-8 text-center"
+                    style={{ borderColor: 'rgba(217, 151, 87, 0.4)' }}
+                  >
+                    <Plus className="h-8 w-8 mx-auto mb-2" style={{ color: '#D97757' }} />
+                    <p className="mb-2" style={{ color: '#141413', opacity: 0.5 }}>لا توجد روابط بعد</p>
+                    <Button 
+                      variant="outline" 
+                      onClick={() => setShowAddForm(true)}
+                      style={{ borderColor: '#D97757', color: '#D97757' }}
+                    >
                       إضافة أول رابط
                     </Button>
                   </div>
