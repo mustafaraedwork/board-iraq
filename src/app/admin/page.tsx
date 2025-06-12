@@ -1,4 +1,4 @@
-// src/app/admin/page.tsx - Enhanced Admin Dashboard (Rewritten)
+// src/app/admin/page.tsx - Enhanced Admin Dashboard (Updated with New Brand Identity)
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -35,10 +35,9 @@ import {
   FileText,
   Target,
   User,
-  Archive  // ✅ إضافة أيقونة Archive
+  Archive
 } from 'lucide-react';
 import { type BatchUser } from '@/lib/supabase/batch-users';
-// ✅ إضافة مكتبات ضغط QR Codes
 import { 
   createBatchUsers, 
   downloadCSV, 
@@ -392,7 +391,7 @@ export default function EnhancedAdminPage() {
     }
   };
 
-  // ✅ دالة جديدة: تحميل QR Codes مضغوطة في ZIP
+  // دالة جديدة: تحميل QR Codes مضغوطة في ZIP
   const handleDownloadQRZip = async () => {
     if (!batchResult || !batchResult.success || batchResult.users.length === 0) {
       alert('لا توجد QR Codes للتحميل');
@@ -408,7 +407,7 @@ export default function EnhancedAdminPage() {
     }
   };
 
-  // ✅ دالة جديدة: تحميل QR Codes منفردة
+  // دالة جديدة: تحميل QR Codes منفردة
   const handleDownloadQRIndividual = () => {
     if (!batchResult || !batchResult.success || batchResult.users.length === 0) {
       alert('لا توجد QR Codes للتحميل');
@@ -473,13 +472,13 @@ export default function EnhancedAdminPage() {
   // شاشة تحميل فحص الصلاحيات
   if (isLoadingPermissions) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center" dir="rtl">
+      <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: '#F0EEE6' }} dir="rtl">
         <div className="text-center">
-          <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-            <Shield className="h-8 w-8 text-blue-600" />
+          <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4" style={{ backgroundColor: 'rgba(217, 151, 87, 0.1)' }}>
+            <Shield className="h-8 w-8" style={{ color: '#D97757' }} />
           </div>
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">فحص صلاحيات الوصول...</p>
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 mx-auto mb-4" style={{ borderColor: '#D97757' }}></div>
+          <p style={{ color: '#141413', opacity: 0.7 }}>فحص صلاحيات الوصول...</p>
         </div>
       </div>
     );
@@ -490,19 +489,22 @@ export default function EnhancedAdminPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50" dir="rtl">
+    <div className="min-h-screen" style={{ backgroundColor: '#F0EEE6' }} dir="rtl">
       {/* Header */}
-      <header className="bg-white shadow-sm">
+      <header style={{ backgroundColor: 'rgba(255, 255, 255, 0.9)' }} className="shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-4">
-            <div className="flex items-center space-x-3 space-x-reverse">
-              <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
-                <Shield className="h-4 w-4 text-green-600" />
-              </div>
-              <h1 className="text-2xl font-bold text-gray-900">لوحة الإدارة المتقدمة</h1>
+            <div className="flex items-center gap-3">
+              <img src="/logo.svg" alt="Board Iraq" className="w-18 h-8" />
             </div>
-            <div className="flex items-center space-x-4 space-x-reverse">
-              <Button size="sm" onClick={loadAllData} disabled={loading}>
+            <div className="flex items-center gap-4">
+              <Button 
+                size="sm" 
+                onClick={loadAllData} 
+                disabled={loading}
+                style={{ backgroundColor: '#D97757', color: 'white' }}
+                className="hover:opacity-90 border-0 focus:ring-orange-400"
+              >
                 {loading ? (
                   <Loader2 className="h-4 w-4 animate-spin ml-2" />
                 ) : (
@@ -510,7 +512,13 @@ export default function EnhancedAdminPage() {
                 )}
                 تحديث البيانات
               </Button>
-              <Button variant="outline" size="sm" onClick={AuthService.logout}>
+              <Button 
+                variant="outline" 
+                size="sm" 
+                onClick={AuthService.logout}
+                style={{ borderColor: '#D97757', color: '#D97757' }}
+                className="hover:bg-orange-50 border-0 focus:ring-orange-400"
+              >
                 تسجيل الخروج
               </Button>
             </div>
@@ -521,14 +529,14 @@ export default function EnhancedAdminPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Enhanced Stats Overview */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-          <Card>
+          <Card style={{ backgroundColor: 'rgba(255, 255, 255, 0.9)' }} className="border-0">
             <CardContent className="p-6">
               <div className="flex items-center">
-                <Users className="h-8 w-8 text-blue-600" />
+                <Users className="h-8 w-8" style={{ color: '#D97757' }} />
                 <div className="mr-4 flex-1">
-                  <p className="text-sm font-medium text-gray-600">إجمالي المستخدمين</p>
-                  <p className="text-2xl font-bold text-gray-900">{stats.totalUsers}</p>
-                  <p className="text-xs text-green-600 flex items-center">
+                  <p className="text-sm font-medium" style={{ color: '#141413', opacity: 0.7 }}>إجمالي المستخدمين</p>
+                  <p className="text-2xl font-bold" style={{ color: '#141413' }}>{stats.totalUsers}</p>
+                  <p className="text-xs flex items-center" style={{ color: '#D97757' }}>
                     <TrendingUp className="h-3 w-3 ml-1" />
                     +{stats.recentSignups} هذا الأسبوع
                   </p>
@@ -537,14 +545,14 @@ export default function EnhancedAdminPage() {
             </CardContent>
           </Card>
 
-          <Card>
+          <Card style={{ backgroundColor: 'rgba(255, 255, 255, 0.9)' }} className="border-0">
             <CardContent className="p-6">
               <div className="flex items-center">
-                <BarChart3 className="h-8 w-8 text-purple-600" />
+                <BarChart3 className="h-8 w-8" style={{ color: '#D97757' }} />
                 <div className="mr-4 flex-1">
-                  <p className="text-sm font-medium text-gray-600">إجمالي الزيارات</p>
-                  <p className="text-2xl font-bold text-gray-900">{stats.totalVisits.toLocaleString()}</p>
-                  <p className="text-xs text-blue-600">
+                  <p className="text-sm font-medium" style={{ color: '#141413', opacity: 0.7 }}>إجمالي الزيارات</p>
+                  <p className="text-2xl font-bold" style={{ color: '#141413' }}>{stats.totalVisits.toLocaleString()}</p>
+                  <p className="text-xs" style={{ color: '#D97757' }}>
                     {stats.avgVisitsPerUser} متوسط/مستخدم
                   </p>
                 </div>
@@ -552,14 +560,14 @@ export default function EnhancedAdminPage() {
             </CardContent>
           </Card>
 
-          <Card>
+          <Card style={{ backgroundColor: 'rgba(255, 255, 255, 0.9)' }} className="border-0">
             <CardContent className="p-6">
               <div className="flex items-center">
-                <MousePointer className="h-8 w-8 text-green-600" />
+                <MousePointer className="h-8 w-8" style={{ color: '#D97757' }} />
                 <div className="mr-4 flex-1">
-                  <p className="text-sm font-medium text-gray-600">النقرات الإجمالية</p>
-                  <p className="text-2xl font-bold text-gray-900">{stats.totalClicks.toLocaleString()}</p>
-                  <p className="text-xs text-green-600">
+                  <p className="text-sm font-medium" style={{ color: '#141413', opacity: 0.7 }}>النقرات الإجمالية</p>
+                  <p className="text-2xl font-bold" style={{ color: '#141413' }}>{stats.totalClicks.toLocaleString()}</p>
+                  <p className="text-xs" style={{ color: '#D97757' }}>
                     {stats.avgLinksPerUser} روابط/مستخدم
                   </p>
                 </div>
@@ -567,14 +575,14 @@ export default function EnhancedAdminPage() {
             </CardContent>
           </Card>
 
-          <Card>
+          <Card style={{ backgroundColor: 'rgba(255, 255, 255, 0.9)' }} className="border-0">
             <CardContent className="p-6">
               <div className="flex items-center">
-                <Star className="h-8 w-8 text-orange-600" />
+                <Star className="h-8 w-8" style={{ color: '#D97757' }} />
                 <div className="mr-4 flex-1">
-                  <p className="text-sm font-medium text-gray-600">مستخدمين مميزين</p>
-                  <p className="text-2xl font-bold text-gray-900">{stats.premiumUsers}</p>
-                  <p className="text-xs text-orange-600">
+                  <p className="text-sm font-medium" style={{ color: '#141413', opacity: 0.7 }}>مستخدمين مميزين</p>
+                  <p className="text-2xl font-bold" style={{ color: '#141413' }}>{stats.premiumUsers}</p>
+                  <p className="text-xs" style={{ color: '#D97757' }}>
                     {stats.activeUsers} نشط شهرياً
                   </p>
                 </div>
@@ -584,35 +592,37 @@ export default function EnhancedAdminPage() {
         </div>
 
         {/* Filters Section */}
-        <Card className="mb-8">
+        <Card className="mb-8 border-0" style={{ backgroundColor: 'rgba(255, 255, 255, 0.9)' }}>
           <CardHeader>
-            <CardTitle className="flex items-center">
-              <Filter className="h-5 w-5 ml-2" />
+            <CardTitle className="flex items-center" style={{ color: '#141413' }}>
+              <Filter className="h-5 w-5 ml-2" style={{ color: '#D97757' }} />
               تصفية وبحث المستخدمين
             </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">البحث</label>
+                <label className="block text-sm font-medium mb-2" style={{ color: '#141413' }}>البحث</label>
                 <div className="relative">
-                  <Search className="absolute right-3 top-2.5 h-4 w-4 text-gray-400" />
+                  <Search className="absolute right-3 top-2.5 h-4 w-4" style={{ color: '#141413', opacity: 0.5 }} />
                   <input
                     type="text"
                     value={filters.search}
                     onChange={(e) => setFilters(prev => ({ ...prev, search: e.target.value }))}
-                    className="w-full pr-10 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full pr-10 px-3 py-2 border-0 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-400"
+                    style={{ backgroundColor: 'rgba(217, 151, 87, 0.05)', color: '#141413' }}
                     placeholder="اسم المستخدم، الإيميل، الشركة..."
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">نوع المستخدم</label>
+                <label className="block text-sm font-medium mb-2" style={{ color: '#141413' }}>نوع المستخدم</label>
                 <select
                   value={filters.userType}
                   onChange={(e) => setFilters(prev => ({ ...prev, userType: e.target.value as any }))}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border-0 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-400"
+                  style={{ backgroundColor: 'rgba(217, 151, 87, 0.05)', color: '#141413' }}
                 >
                   <option value="all">جميع المستخدمين</option>
                   <option value="regular">مستخدمين عاديين</option>
@@ -622,11 +632,12 @@ export default function EnhancedAdminPage() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">النشاط</label>
+                <label className="block text-sm font-medium mb-2" style={{ color: '#141413' }}>النشاط</label>
                 <select
                   value={filters.activity}
                   onChange={(e) => setFilters(prev => ({ ...prev, activity: e.target.value as any }))}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border-0 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-400"
+                  style={{ backgroundColor: 'rgba(217, 151, 87, 0.05)', color: '#141413' }}
                 >
                   <option value="all">جميع المستخدمين</option>
                   <option value="active">نشط (آخر 30 يوم)</option>
@@ -635,11 +646,12 @@ export default function EnhancedAdminPage() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">فترة التسجيل</label>
+                <label className="block text-sm font-medium mb-2" style={{ color: '#141413' }}>فترة التسجيل</label>
                 <select
                   value={filters.period}
                   onChange={(e) => setFilters(prev => ({ ...prev, period: e.target.value as any }))}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border-0 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-400"
+                  style={{ backgroundColor: 'rgba(217, 151, 87, 0.05)', color: '#141413' }}
                 >
                   <option value="all">جميع الفترات</option>
                   <option value="today">اليوم</option>
@@ -650,11 +662,17 @@ export default function EnhancedAdminPage() {
             </div>
 
             <div className="flex items-center justify-between mt-4">
-              <div className="text-sm text-gray-600">
+              <div className="text-sm" style={{ color: '#141413', opacity: 0.7 }}>
                 عرض {filteredUsers.length} من {users.length} مستخدم
               </div>
-              <div className="flex space-x-2 space-x-reverse">
-                <Button variant="outline" size="sm" onClick={exportUsersCSV}>
+              <div className="flex gap-2">
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  onClick={exportUsersCSV}
+                  style={{ borderColor: '#D97757', color: '#D97757' }}
+                  className="hover:bg-orange-50 border-0 focus:ring-orange-400"
+                >
                   <Download className="h-4 w-4 ml-2" />
                   تصدير CSV
                 </Button>
@@ -662,6 +680,8 @@ export default function EnhancedAdminPage() {
                   variant="outline" 
                   size="sm" 
                   onClick={() => setFilters({ search: '', userType: 'all', activity: 'all', period: 'all' })}
+                  style={{ borderColor: '#D97757', color: '#D97757' }}
+                  className="hover:bg-orange-50 border-0 focus:ring-orange-400"
                 >
                   مسح الفلاتر
                 </Button>
@@ -671,11 +691,11 @@ export default function EnhancedAdminPage() {
         </Card>
 
         {/* Users Table */}
-        <Card className="mb-8">
+        <Card className="mb-8 border-0" style={{ backgroundColor: 'rgba(255, 255, 255, 0.9)' }}>
           <CardHeader>
             <CardTitle className="flex items-center justify-between">
-              <div className="flex items-center">
-                <Users className="h-5 w-5 ml-2" />
+              <div className="flex items-center" style={{ color: '#141413' }}>
+                <Users className="h-5 w-5 ml-2" style={{ color: '#D97757' }} />
                 تفاصيل المستخدمين ({filteredUsers.length})
               </div>
             </CardTitle>
@@ -684,31 +704,31 @@ export default function EnhancedAdminPage() {
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
                 <thead>
-                  <tr className="border-b border-gray-200">
-                    <th className="text-right py-3 px-4 font-medium text-gray-700">المستخدم</th>
-                    <th className="text-right py-3 px-4 font-medium text-gray-700">معلومات الاتصال</th>
-                    <th className="text-right py-3 px-4 font-medium text-gray-700">الإحصائيات</th>
-                    <th className="text-right py-3 px-4 font-medium text-gray-700">الحالة</th>
-                    <th className="text-right py-3 px-4 font-medium text-gray-700">التاريخ</th>
-                    <th className="text-center py-3 px-4 font-medium text-gray-700">الإجراءات</th>
+                  <tr style={{ borderBottomColor: 'rgba(217, 151, 87, 0.2)' }} className="border-b">
+                    <th className="text-right py-3 px-4 font-medium" style={{ color: '#141413' }}>المستخدم</th>
+                    <th className="text-right py-3 px-4 font-medium" style={{ color: '#141413' }}>معلومات الاتصال</th>
+                    <th className="text-right py-3 px-4 font-medium" style={{ color: '#141413' }}>الإحصائيات</th>
+                    <th className="text-right py-3 px-4 font-medium" style={{ color: '#141413' }}>الحالة</th>
+                    <th className="text-right py-3 px-4 font-medium" style={{ color: '#141413' }}>التاريخ</th>
+                    <th className="text-center py-3 px-4 font-medium" style={{ color: '#141413' }}>الإجراءات</th>
                   </tr>
                 </thead>
                 <tbody>
                   {filteredUsers.map((user, index) => (
-                    <tr key={user.id} className={`border-b border-gray-100 hover:bg-gray-50 ${index % 2 === 0 ? 'bg-white' : 'bg-gray-25'}`}>
+                    <tr key={user.id} className={`border-b hover:bg-orange-25 ${index % 2 === 0 ? 'bg-white' : 'bg-orange-25'}`} style={{ borderBottomColor: 'rgba(217, 151, 87, 0.1)' }}>
                       <td className="py-4 px-4">
                         <div className="flex items-center">
-                          <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center text-white font-bold text-sm">
+                          <div className="w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-sm" style={{ background: 'linear-gradient(135deg, #D97757, #C76646)' }}>
                             {(user.full_name || user.username).charAt(0).toUpperCase()}
                           </div>
                           <div className="mr-3">
-                            <div className="font-medium text-gray-900">
+                            <div className="font-medium" style={{ color: '#141413' }}>
                               {user.full_name || user.username}
-                              {user.is_premium && <Star className="inline h-4 w-4 text-yellow-500 mr-1" />}
+                              {user.is_premium && <Star className="inline h-4 w-4 ml-1" style={{ color: '#D97757' }} />}
                             </div>
-                            <div className="text-sm text-gray-500">@{user.username}</div>
+                            <div className="text-sm" style={{ color: '#141413', opacity: 0.5 }}>@{user.username}</div>
                             {user.job_title && user.company && (
-                              <div className="text-xs text-blue-600">
+                              <div className="text-xs" style={{ color: '#D97757' }}>
                                 {user.job_title} - {user.company}
                               </div>
                             )}
@@ -719,19 +739,19 @@ export default function EnhancedAdminPage() {
                       <td className="py-4 px-4">
                         <div className="space-y-1">
                           {user.email && (
-                            <div className="flex items-center text-xs text-gray-600">
+                            <div className="flex items-center text-xs" style={{ color: '#141413', opacity: 0.7 }}>
                               <Mail className="h-3 w-3 ml-1" />
                               {user.email}
                             </div>
                           )}
                           {user.phone && (
-                            <div className="flex items-center text-xs text-gray-600">
+                            <div className="flex items-center text-xs" style={{ color: '#141413', opacity: 0.7 }}>
                               <Phone className="h-3 w-3 ml-1" />
                               {user.phone}
                             </div>
                           )}
                           {!user.email && !user.phone && (
-                            <span className="text-xs text-gray-400">لا توجد معلومات</span>
+                            <span className="text-xs" style={{ color: '#141413', opacity: 0.4 }}>لا توجد معلومات</span>
                           )}
                         </div>
                       </td>
@@ -739,24 +759,24 @@ export default function EnhancedAdminPage() {
                       <td className="py-4 px-4">
                         <div className="space-y-1">
                           <div className="flex items-center text-xs">
-                            <Eye className="h-3 w-3 ml-1 text-blue-500" />
-                            <span className="font-medium">{user.total_visits}</span>
-                            <span className="text-gray-500 mr-1">زيارة</span>
+                            <Eye className="h-3 w-3 ml-1" style={{ color: '#D97757' }} />
+                            <span className="font-medium" style={{ color: '#141413' }}>{user.total_visits}</span>
+                            <span style={{ color: '#141413', opacity: 0.5 }} className="mr-1">زيارة</span>
                           </div>
                           <div className="flex items-center text-xs">
-                            <MousePointer className="h-3 w-3 ml-1 text-green-500" />
-                            <span className="font-medium">{user.total_clicks}</span>
-                            <span className="text-gray-500 mr-1">نقرة</span>
+                            <MousePointer className="h-3 w-3 ml-1" style={{ color: '#D97757' }} />
+                            <span className="font-medium" style={{ color: '#141413' }}>{user.total_clicks}</span>
+                            <span style={{ color: '#141413', opacity: 0.5 }} className="mr-1">نقرة</span>
                           </div>
                           <div className="flex items-center text-xs">
-                            <ExternalLink className="h-3 w-3 ml-1 text-purple-500" />
-                            <span className="font-medium">{user.links_count}</span>
-                            <span className="text-gray-500 mr-1">رابط</span>
+                            <ExternalLink className="h-3 w-3 ml-1" style={{ color: '#D97757' }} />
+                            <span className="font-medium" style={{ color: '#141413' }}>{user.links_count}</span>
+                            <span style={{ color: '#141413', opacity: 0.5 }} className="mr-1">رابط</span>
                           </div>
                           <div className="flex items-center text-xs">
-                            <Target className="h-3 w-3 ml-1 text-orange-500" />
-                            <span className="font-medium">{user.profile_completion}%</span>
-                            <span className="text-gray-500 mr-1">مكتمل</span>
+                            <Target className="h-3 w-3 ml-1" style={{ color: '#D97757' }} />
+                            <span className="font-medium" style={{ color: '#141413' }}>{user.profile_completion}%</span>
+                            <span style={{ color: '#141413', opacity: 0.5 }} className="mr-1">مكتمل</span>
                           </div>
                         </div>
                       </td>
@@ -765,7 +785,7 @@ export default function EnhancedAdminPage() {
                         <div className="space-y-2">
                           <div className="flex items-center">
                             {user.is_active ? (
-                              <div className="flex items-center text-xs text-green-600">
+                              <div className="flex items-center text-xs" style={{ color: '#D97757' }}>
                                 <CheckCircle className="h-3 w-3 ml-1" />
                                 نشط
                               </div>
@@ -778,12 +798,12 @@ export default function EnhancedAdminPage() {
                           </div>
                           <div className="flex flex-wrap gap-1">
                             {user.is_batch_generated && (
-                              <span className="px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded">
+                              <span className="px-2 py-1 text-xs rounded" style={{ backgroundColor: 'rgba(217, 151, 87, 0.1)', color: '#D97757' }}>
                                 جملة
                               </span>
                             )}
                             {user.is_premium && (
-                              <span className="px-2 py-1 bg-yellow-100 text-yellow-700 text-xs rounded">
+                              <span className="px-2 py-1 text-xs rounded" style={{ backgroundColor: 'rgba(217, 151, 87, 0.2)', color: '#D97757' }}>
                                 مميز
                               </span>
                             )}
@@ -793,12 +813,12 @@ export default function EnhancedAdminPage() {
                       
                       <td className="py-4 px-4">
                         <div className="space-y-1">
-                          <div className="flex items-center text-xs text-gray-600">
+                          <div className="flex items-center text-xs" style={{ color: '#141413', opacity: 0.7 }}>
                             <Calendar className="h-3 w-3 ml-1" />
                             {new Date(user.created_at).toLocaleDateString('ar')}
                           </div>
                           {user.last_visit_at && (
-                            <div className="flex items-center text-xs text-gray-500">
+                            <div className="flex items-center text-xs" style={{ color: '#141413', opacity: 0.5 }}>
                               <Clock className="h-3 w-3 ml-1" />
                               آخر زيارة: {new Date(user.last_visit_at).toLocaleDateString('ar')}
                             </div>
@@ -807,12 +827,13 @@ export default function EnhancedAdminPage() {
                       </td>
                       
                       <td className="py-4 px-4">
-                        <div className="flex items-center justify-center space-x-2 space-x-reverse">
+                        <div className="flex items-center justify-center gap-2">
                           <Button 
                             size="sm" 
                             variant="outline"
                             onClick={() => handleViewUser(user)}
-                            className="h-8 w-8 p-0"
+                            className="h-8 w-8 p-0 border-0 focus:ring-orange-400"
+                            style={{ backgroundColor: 'rgba(217, 151, 87, 0.1)', color: '#D97757' }}
                           >
                             <Eye className="h-3 w-3" />
                           </Button>
@@ -820,7 +841,8 @@ export default function EnhancedAdminPage() {
                             size="sm" 
                             variant="outline"
                             onClick={() => window.open(`/${user.username}`, '_blank')}
-                            className="h-8 w-8 p-0"
+                            className="h-8 w-8 p-0 border-0 focus:ring-orange-400"
+                            style={{ backgroundColor: 'rgba(217, 151, 87, 0.1)', color: '#D97757' }}
                           >
                             <Globe className="h-3 w-3" />
                           </Button>
@@ -828,7 +850,8 @@ export default function EnhancedAdminPage() {
                             size="sm" 
                             variant="outline"
                             onClick={() => handleDeleteUser(user.id)}
-                            className="h-8 w-8 p-0 text-red-600 hover:text-red-700"
+                            className="h-8 w-8 p-0 border-0 text-red-600 hover:text-red-700 focus:ring-orange-400"
+                            style={{ backgroundColor: 'rgba(239, 68, 68, 0.1)' }}
                           >
                             <Trash2 className="h-3 w-3" />
                           </Button>
@@ -841,8 +864,8 @@ export default function EnhancedAdminPage() {
               
               {filteredUsers.length === 0 && (
                 <div className="text-center py-12">
-                  <Users className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                  <p className="text-gray-600">لا توجد مستخدمين يطابقون معايير البحث</p>
+                  <Users className="h-12 w-12 mx-auto mb-4" style={{ color: '#141413', opacity: 0.4 }} />
+                  <p style={{ color: '#141413', opacity: 0.7 }}>لا توجد مستخدمين يطابقون معايير البحث</p>
                 </div>
               )}
             </div>
@@ -850,22 +873,22 @@ export default function EnhancedAdminPage() {
         </Card>
 
         {/* Batch Generation Card */}
-        <Card className="mb-8">
+        <Card className="mb-8 border-0" style={{ backgroundColor: 'rgba(255, 255, 255, 0.9)' }}>
           <CardHeader>
-            <CardTitle className="flex items-center">
-              <Plus className="h-5 w-5 ml-2" />
+            <CardTitle className="flex items-center" style={{ color: '#141413' }}>
+              <Plus className="h-5 w-5 ml-2" style={{ color: '#D97757' }} />
               إنشاء حسابات بالجملة
             </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div className="md:col-span-2">
-                <p className="text-gray-600 mb-4">
+                <p className="mb-4" style={{ color: '#141413', opacity: 0.7 }}>
                   قم بإنشاء حسابات متعددة للطباعة على البطاقات الجديدة
                 </p>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium mb-2" style={{ color: '#141413' }}>
                       عدد الحسابات المطلوبة *
                     </label>
                     <input
@@ -874,20 +897,22 @@ export default function EnhancedAdminPage() {
                       max="10000"
                       value={batchCount}
                       onChange={(e) => setBatchCount(parseInt(e.target.value) || 0)}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full px-3 py-2 border-0 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-400"
+                      style={{ backgroundColor: 'rgba(217, 151, 87, 0.05)', color: '#141413' }}
                       placeholder="مثال: 1000"
                       disabled={loading}
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium mb-2" style={{ color: '#141413' }}>
                       بادئة الأسماء *
                     </label>
                     <input
                       type="text"
                       value={batchPrefix}
                       onChange={(e) => setBatchPrefix(e.target.value.toLowerCase().replace(/[^a-z0-9]/g, ''))}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full px-3 py-2 border-0 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-400"
+                      style={{ backgroundColor: 'rgba(217, 151, 87, 0.05)', color: '#141413' }}
                       placeholder="مثال: card"
                       disabled={loading}
                     />
@@ -895,11 +920,11 @@ export default function EnhancedAdminPage() {
                 </div>
                 
                 {batchPrefix && batchCount > 0 && (
-                  <div className="mt-3 p-3 bg-blue-50 rounded-md">
-                    <p className="text-sm text-blue-800">
+                  <div className="mt-3 p-3 rounded-md" style={{ backgroundColor: 'rgba(217, 151, 87, 0.1)' }}>
+                    <p className="text-sm" style={{ color: '#D97757' }}>
                       <strong>مثال على الأسماء:</strong> {batchPrefix}0001, {batchPrefix}0002, {batchPrefix}0003...
                     </p>
-                    <p className="text-sm text-blue-600 mt-1">
+                    <p className="text-sm mt-1" style={{ color: '#D97757', opacity: 0.8 }}>
                       <strong>الروابط:</strong> boardiraq.com/{batchPrefix}0001
                     </p>
                   </div>
@@ -908,9 +933,10 @@ export default function EnhancedAdminPage() {
               
               <div className="flex flex-col justify-end space-y-3">
                 <Button 
-                  className="bg-green-600 hover:bg-green-700"
                   onClick={handleCreateBatch}
                   disabled={loading || batchCount < 1 || !batchPrefix.trim()}
+                  style={{ backgroundColor: '#D97757', color: 'white' }}
+                  className="hover:opacity-90 border-0 focus:ring-orange-400"
                 >
                   {loading ? (
                     <>
@@ -929,43 +955,44 @@ export default function EnhancedAdminPage() {
                   variant="outline"
                   onClick={() => {
                     if (batchResult?.success) {
-                                          const csvHeaders = ['اسم المستخدم', 'كلمة المرور', 'الاسم الكامل', 'رابط الملف الشخصي'];
-                    const csvRows = [csvHeaders.join(',')];
+                      const csvHeaders = ['اسم المستخدم', 'كلمة المرور', 'الاسم الكامل', 'رابط الملف الشخصي'];
+                      const csvRows = [csvHeaders.join(',')];
 
-                    batchResult.users.forEach(user => {
-                      const profileUrl = `${process.env.NEXT_PUBLIC_SITE_URL || 'https://boardiraq.com'}/${user.username}`;
-                      const row = [user.username, user.password, user.full_name, profileUrl].join(',');
-                      csvRows.push(row);
-                    });
+                      batchResult.users.forEach(user => {
+                        const profileUrl = `${process.env.NEXT_PUBLIC_SITE_URL || 'https://boardiraq.com'}/${user.username}`;
+                        const row = [user.username, user.password, user.full_name, profileUrl].join(',');
+                        csvRows.push(row);
+                      });
 
-                    const csvData = csvRows.join('\n');
-                    downloadCSV(csvData, `${batchPrefix}_accounts`);
+                      const csvData = csvRows.join('\n');
+                      downloadCSV(csvData, `${batchPrefix}_accounts`);
                     }
                   }}
                   disabled={!batchResult || !batchResult.success}
-                  className="text-blue-600 border-blue-600 hover:bg-blue-50"
+                  style={{ borderColor: '#D97757', color: '#D97757' }}
+                  className="hover:bg-orange-50 border-0 focus:ring-orange-400"
                 >
                   <Download className="h-4 w-4 ml-2" />
                   تحميل بيانات CSV
                 </Button>
                 
-                {/* ✅ زر جديد: تحميل QR مضغوط */}
                 <Button 
                   variant="outline"
                   onClick={handleDownloadQRZip}
                   disabled={!batchResult || !batchResult.success}
-                  className="text-purple-600 border-purple-600 hover:bg-purple-50 font-medium"
+                  style={{ borderColor: '#D97757', color: '#D97757' }}
+                  className="hover:bg-orange-50 border-0 focus:ring-orange-400 font-medium"
                 >
                   <Archive className="h-4 w-4 ml-2" />
                   📦 تحميل QR مضغوط (ZIP) ⭐
                 </Button>
                 
-                {/* ✅ زر: تحميل QR منفرد */}
                 <Button 
                   variant="outline"
                   onClick={handleDownloadQRIndividual}
                   disabled={!batchResult || !batchResult.success}
-                  className="text-orange-600 border-orange-600 hover:bg-orange-50"
+                  style={{ borderColor: '#D97757', color: '#D97757' }}
+                  className="hover:bg-orange-50 border-0 focus:ring-orange-400"
                 >
                   <Download className="h-4 w-4 ml-2" />
                   تحميل QR منفردة ({batchResult?.users.length || 0})
@@ -974,36 +1001,36 @@ export default function EnhancedAdminPage() {
             </div>
 
             {batchResult && (
-              <div className="mt-6 p-4 rounded-lg border">
+              <div className="mt-6 p-4 rounded-lg border-0" style={{ backgroundColor: 'rgba(217, 151, 87, 0.05)' }}>
                 {batchResult.success ? (
-                  <div className="flex items-start space-x-3 space-x-reverse">
-                    <CheckCircle className="h-5 w-5 text-green-500 mt-0.5" />
+                  <div className="flex items-start gap-3">
+                    <CheckCircle className="h-5 w-5 mt-0.5" style={{ color: '#D97757' }} />
                     <div className="flex-1">
-                      <h4 className="text-sm font-medium text-green-800">
+                      <h4 className="text-sm font-medium" style={{ color: '#D97757' }}>
                         تم إنشاء {batchResult.users.length} حساب بنجاح مع QR Codes! 🎉
                       </h4>
-                      <p className="text-sm text-green-600 mt-1">
+                      <p className="text-sm mt-1" style={{ color: '#D97757', opacity: 0.8 }}>
                         يمكنك الآن تحميل ملف CSV، QR Codes مضغوطة، أو منفردة
                       </p>
                       
-                      {/* ✅ معاينة QR Codes */}
                       {batchResult.users.length > 0 && (
-                        <div className="mt-4 p-3 bg-gray-50 rounded-lg">
-                          <h5 className="text-sm font-medium text-gray-700 mb-2">معاينة QR Codes:</h5>
+                        <div className="mt-4 p-3 rounded-lg" style={{ backgroundColor: 'rgba(217, 151, 87, 0.1)' }}>
+                          <h5 className="text-sm font-medium mb-2" style={{ color: '#141413' }}>معاينة QR Codes:</h5>
                           <div className="flex gap-2 overflow-x-auto">
                             {batchResult.users.slice(0, 4).map((user, index) => (
                               <div key={index} className="flex-shrink-0 text-center">
                                 <img 
                                   src={user.qr_code} 
                                   alt={`QR Code for ${user.username}`}
-                                  className="w-16 h-16 border border-gray-300 rounded"
+                                  className="w-16 h-16 border rounded"
+                                  style={{ borderColor: 'rgba(217, 151, 87, 0.3)' }}
                                 />
-                                <p className="text-xs text-gray-600 mt-1">{user.username}</p>
+                                <p className="text-xs mt-1" style={{ color: '#141413', opacity: 0.7 }}>{user.username}</p>
                               </div>
                             ))}
                             {batchResult.users.length > 4 && (
-                              <div className="flex-shrink-0 w-16 h-16 border border-gray-300 rounded flex items-center justify-center bg-gray-100">
-                                <p className="text-xs text-gray-500 text-center">
+                              <div className="flex-shrink-0 w-16 h-16 border rounded flex items-center justify-center" style={{ borderColor: 'rgba(217, 151, 87, 0.3)', backgroundColor: 'rgba(217, 151, 87, 0.05)' }}>
+                                <p className="text-xs text-center" style={{ color: '#141413', opacity: 0.5 }}>
                                   +{batchResult.users.length - 4}<br/>المزيد
                                 </p>
                               </div>
@@ -1012,10 +1039,9 @@ export default function EnhancedAdminPage() {
                         </div>
                       )}
 
-                      {/* ✅ شرح محتويات ZIP */}
-                      <div className="mt-3 p-3 bg-blue-50 rounded-lg">
-                        <h5 className="text-sm font-medium text-blue-700 mb-1">📦 محتويات ملف ZIP:</h5>
-                        <ul className="text-xs text-blue-600 space-y-1">
+                      <div className="mt-3 p-3 rounded-lg" style={{ backgroundColor: 'rgba(217, 151, 87, 0.1)' }}>
+                        <h5 className="text-sm font-medium mb-1" style={{ color: '#D97757' }}>📦 محتويات ملف ZIP:</h5>
+                        <ul className="text-xs space-y-1" style={{ color: '#D97757', opacity: 0.8 }}>
                           <li>• {batchResult.users.length} ملف PNG (أكواد QR)</li>
                           <li>• ملف CSV مع بيانات الحسابات</li>
                           <li>• ملف README مع التعليمات</li>
@@ -1023,14 +1049,14 @@ export default function EnhancedAdminPage() {
                         </ul>
                       </div>
                       {batchResult.error && (
-                        <p className="text-sm text-orange-600 mt-1">
+                        <p className="text-sm mt-1" style={{ color: '#D97757', opacity: 0.8 }}>
                           تحذير: {batchResult.error}
                         </p>
                       )}
                     </div>
                   </div>
                 ) : (
-                  <div className="flex items-start space-x-3 space-x-reverse">
+                  <div className="flex items-start gap-3">
                     <AlertCircle className="h-5 w-5 text-red-500 mt-0.5" />
                     <div className="flex-1">
                       <h4 className="text-sm font-medium text-red-800">
@@ -1106,13 +1132,19 @@ function UserDetailsModal({ user, onClose, onRefresh }: UserDetailsModalProps) {
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4" dir="rtl">
-      <div className="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto">
-        <div className="p-6 border-b border-gray-200">
+      <div style={{ backgroundColor: 'rgba(255, 255, 255, 0.95)' }} className="rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+        <div className="p-6 border-b" style={{ borderBottomColor: 'rgba(217, 151, 87, 0.2)' }}>
           <div className="flex items-center justify-between">
-            <h2 className="text-xl font-bold text-gray-900">
+            <h2 className="text-xl font-bold" style={{ color: '#141413' }}>
               تفاصيل المستخدم: {user.full_name || user.username}
             </h2>
-            <Button variant="outline" size="sm" onClick={onClose}>
+            <Button 
+              variant="outline" 
+              size="sm" 
+              onClick={onClose}
+              style={{ borderColor: '#D97757', color: '#D97757' }}
+              className="border-0 focus:ring-orange-400"
+            >
               <span className="text-lg">×</span>
             </Button>
           </div>
@@ -1120,61 +1152,61 @@ function UserDetailsModal({ user, onClose, onRefresh }: UserDetailsModalProps) {
 
         <div className="p-6 space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <Card>
+            <Card style={{ backgroundColor: 'rgba(255, 255, 255, 0.9)' }} className="border-0">
               <CardHeader>
-                <CardTitle className="text-lg">المعلومات الشخصية</CardTitle>
+                <CardTitle className="text-lg" style={{ color: '#141413' }}>المعلومات الشخصية</CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
                 <div className="flex items-center">
-                  <User className="h-4 w-4 text-gray-400 ml-2" />
-                  <span className="text-sm">
+                  <User className="h-4 w-4 ml-2" style={{ color: '#D97757' }} />
+                  <span className="text-sm" style={{ color: '#141413' }}>
                     <strong>اسم المستخدم:</strong> {user.username}
                   </span>
                 </div>
                 {user.full_name && (
                   <div className="flex items-center">
-                    <UserCheck className="h-4 w-4 text-gray-400 ml-2" />
-                    <span className="text-sm">
+                    <UserCheck className="h-4 w-4 ml-2" style={{ color: '#D97757' }} />
+                    <span className="text-sm" style={{ color: '#141413' }}>
                       <strong>الاسم الكامل:</strong> {user.full_name}
                     </span>
                   </div>
                 )}
                 {user.email && (
                   <div className="flex items-center">
-                    <Mail className="h-4 w-4 text-gray-400 ml-2" />
-                    <span className="text-sm">
+                    <Mail className="h-4 w-4 ml-2" style={{ color: '#D97757' }} />
+                    <span className="text-sm" style={{ color: '#141413' }}>
                       <strong>البريد الإلكتروني:</strong> {user.email}
                     </span>
                   </div>
                 )}
                 {user.phone && (
                   <div className="flex items-center">
-                    <Phone className="h-4 w-4 text-gray-400 ml-2" />
-                    <span className="text-sm">
+                    <Phone className="h-4 w-4 ml-2" style={{ color: '#D97757' }} />
+                    <span className="text-sm" style={{ color: '#141413' }}>
                       <strong>الهاتف:</strong> {user.phone}
                     </span>
                   </div>
                 )}
                 {user.job_title && (
                   <div className="flex items-center">
-                    <Settings className="h-4 w-4 text-gray-400 ml-2" />
-                    <span className="text-sm">
+                    <Settings className="h-4 w-4 ml-2" style={{ color: '#D97757' }} />
+                    <span className="text-sm" style={{ color: '#141413' }}>
                       <strong>المسمى الوظيفي:</strong> {user.job_title}
                     </span>
                   </div>
                 )}
                 {user.company && (
                   <div className="flex items-center">
-                    <Settings className="h-4 w-4 text-gray-400 ml-2" />
-                    <span className="text-sm">
+                    <Settings className="h-4 w-4 ml-2" style={{ color: '#D97757' }} />
+                    <span className="text-sm" style={{ color: '#141413' }}>
                       <strong>الشركة:</strong> {user.company}
                     </span>
                   </div>
                 )}
                 {user.bio && (
                   <div className="flex items-start">
-                    <FileText className="h-4 w-4 text-gray-400 ml-2 mt-0.5" />
-                    <span className="text-sm">
+                    <FileText className="h-4 w-4 ml-2 mt-0.5" style={{ color: '#D97757' }} />
+                    <span className="text-sm" style={{ color: '#141413' }}>
                       <strong>النبذة:</strong> {user.bio}
                     </span>
                   </div>
@@ -1182,56 +1214,56 @@ function UserDetailsModal({ user, onClose, onRefresh }: UserDetailsModalProps) {
               </CardContent>
             </Card>
 
-            <Card>
+            <Card style={{ backgroundColor: 'rgba(255, 255, 255, 0.9)' }} className="border-0">
               <CardHeader>
-                <CardTitle className="text-lg">الإحصائيات والحالة</CardTitle>
+                <CardTitle className="text-lg" style={{ color: '#141413' }}>الإحصائيات والحالة</CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
                 <div className="flex items-center justify-between">
-                  <span className="text-sm font-medium">إجمالي الزيارات:</span>
-                  <span className="text-lg font-bold text-blue-600">{user.total_visits}</span>
+                  <span className="text-sm font-medium" style={{ color: '#141413' }}>إجمالي الزيارات:</span>
+                  <span className="text-lg font-bold" style={{ color: '#D97757' }}>{user.total_visits}</span>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-sm font-medium">إجمالي النقرات:</span>
-                  <span className="text-lg font-bold text-green-600">{user.total_clicks}</span>
+                  <span className="text-sm font-medium" style={{ color: '#141413' }}>إجمالي النقرات:</span>
+                  <span className="text-lg font-bold" style={{ color: '#D97757' }}>{user.total_clicks}</span>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-sm font-medium">عدد الروابط:</span>
-                  <span className="text-lg font-bold text-purple-600">{user.links_count}</span>
+                  <span className="text-sm font-medium" style={{ color: '#141413' }}>عدد الروابط:</span>
+                  <span className="text-lg font-bold" style={{ color: '#D97757' }}>{user.links_count}</span>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-sm font-medium">اكتمال الملف:</span>
+                  <span className="text-sm font-medium" style={{ color: '#141413' }}>اكتمال الملف:</span>
                   <div className="flex items-center">
-                    <div className="w-20 bg-gray-200 rounded-full h-2 ml-2">
+                    <div className="w-20 rounded-full h-2 ml-2" style={{ backgroundColor: 'rgba(217, 151, 87, 0.2)' }}>
                       <div 
-                        className="bg-orange-500 h-2 rounded-full" 
-                        style={{ width: `${user.profile_completion}%` }}
+                        className="h-2 rounded-full" 
+                        style={{ backgroundColor: '#D97757', width: `${user.profile_completion}%` }}
                       ></div>
                     </div>
-                    <span className="text-sm font-bold">{user.profile_completion}%</span>
+                    <span className="text-sm font-bold" style={{ color: '#141413' }}>{user.profile_completion}%</span>
                   </div>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-sm font-medium">تاريخ التسجيل:</span>
-                  <span className="text-sm">{new Date(user.created_at).toLocaleDateString('ar')}</span>
+                  <span className="text-sm font-medium" style={{ color: '#141413' }}>تاريخ التسجيل:</span>
+                  <span className="text-sm" style={{ color: '#141413', opacity: 0.7 }}>{new Date(user.created_at).toLocaleDateString('ar')}</span>
                 </div>
                 {user.last_visit_at && (
                   <div className="flex items-center justify-between">
-                    <span className="text-sm font-medium">آخر زيارة:</span>
-                    <span className="text-sm">{new Date(user.last_visit_at).toLocaleDateString('ar')}</span>
+                    <span className="text-sm font-medium" style={{ color: '#141413' }}>آخر زيارة:</span>
+                    <span className="text-sm" style={{ color: '#141413', opacity: 0.7 }}>{new Date(user.last_visit_at).toLocaleDateString('ar')}</span>
                   </div>
                 )}
                 <div className="flex flex-wrap gap-2 pt-2">
-                  <span className={`px-2 py-1 text-xs rounded ${user.is_active ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
+                  <span className={`px-2 py-1 text-xs rounded ${user.is_active ? '' : 'bg-red-100 text-red-700'}`} style={user.is_active ? { backgroundColor: 'rgba(217, 151, 87, 0.1)', color: '#D97757' } : {}}>
                     {user.is_active ? 'نشط' : 'غير نشط'}
                   </span>
                   {user.is_premium && (
-                    <span className="px-2 py-1 bg-yellow-100 text-yellow-700 text-xs rounded">
+                    <span className="px-2 py-1 text-xs rounded" style={{ backgroundColor: 'rgba(217, 151, 87, 0.2)', color: '#D97757' }}>
                       مميز
                     </span>
                   )}
                   {user.is_batch_generated && (
-                    <span className="px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded">
+                    <span className="px-2 py-1 text-xs rounded" style={{ backgroundColor: 'rgba(217, 151, 87, 0.1)', color: '#D97757' }}>
                       حساب جملة
                     </span>
                   )}
@@ -1240,17 +1272,17 @@ function UserDetailsModal({ user, onClose, onRefresh }: UserDetailsModalProps) {
             </Card>
           </div>
 
-          <Card>
+          <Card style={{ backgroundColor: 'rgba(255, 255, 255, 0.9)' }} className="border-0">
             <CardHeader>
-              <CardTitle className="text-lg">روابط المستخدم ({userLinks.length})</CardTitle>
+              <CardTitle className="text-lg" style={{ color: '#141413' }}>روابط المستخدم ({userLinks.length})</CardTitle>
             </CardHeader>
             <CardContent>
               {userLinks.length > 0 ? (
                 <div className="space-y-3">
                   {userLinks.map((link, index) => (
-                    <div key={link.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                    <div key={link.id} className="flex items-center justify-between p-3 rounded-lg" style={{ backgroundColor: 'rgba(217, 151, 87, 0.05)' }}>
                       <div className="flex items-center">
-                        <div className="w-8 h-8 bg-orange-500 rounded-full flex items-center justify-center text-white text-xs">
+                        <div className="w-8 h-8 rounded-full flex items-center justify-center text-white text-xs" style={{ backgroundColor: '#D97757' }}>
                           {link.type === 'phone' ? '📱' : 
                            link.type === 'email' ? '✉️' : 
                            link.type === 'website' ? '🌐' : 
@@ -1259,15 +1291,21 @@ function UserDetailsModal({ user, onClose, onRefresh }: UserDetailsModalProps) {
                            link.platform === 'instagram' ? '📷' : '🔗'}
                         </div>
                         <div className="mr-3">
-                          <div className="font-medium text-sm">{link.title}</div>
-                          <div className="text-xs text-gray-500">{link.type} • {link.click_count} نقرة</div>
+                          <div className="font-medium text-sm" style={{ color: '#141413' }}>{link.title}</div>
+                          <div className="text-xs" style={{ color: '#141413', opacity: 0.5 }}>{link.type} • {link.click_count} نقرة</div>
                         </div>
                       </div>
-                      <div className="flex items-center space-x-2 space-x-reverse">
-                        <span className={`px-2 py-1 text-xs rounded ${link.is_active ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-700'}`}>
+                      <div className="flex items-center gap-2">
+                        <span className={`px-2 py-1 text-xs rounded ${link.is_active ? '' : 'bg-gray-100 text-gray-700'}`} style={link.is_active ? { backgroundColor: 'rgba(217, 151, 87, 0.1)', color: '#D97757' } : {}}>
                           {link.is_active ? 'نشط' : 'معطل'}
                         </span>
-                        <Button size="sm" variant="outline" onClick={() => window.open(link.url, '_blank')}>
+                        <Button 
+                          size="sm" 
+                          variant="outline" 
+                          onClick={() => window.open(link.url, '_blank')}
+                          style={{ borderColor: '#D97757', color: '#D97757' }}
+                          className="border-0 focus:ring-orange-400"
+                        >
                           <ExternalLink className="h-3 w-3" />
                         </Button>
                       </div>
@@ -1275,48 +1313,62 @@ function UserDetailsModal({ user, onClose, onRefresh }: UserDetailsModalProps) {
                   ))}
                 </div>
               ) : (
-                <p className="text-gray-500 text-center py-4">لا توجد روابط</p>
+                <p className="text-center py-4" style={{ color: '#141413', opacity: 0.5 }}>لا توجد روابط</p>
               )}
             </CardContent>
           </Card>
 
-          <Card>
+          <Card style={{ backgroundColor: 'rgba(255, 255, 255, 0.9)' }} className="border-0">
             <CardHeader>
-              <CardTitle className="text-lg">آخر الزيارات ({userVisits.length})</CardTitle>
+              <CardTitle className="text-lg" style={{ color: '#141413' }}>آخر الزيارات ({userVisits.length})</CardTitle>
             </CardHeader>
             <CardContent>
               {userVisits.length > 0 ? (
                 <div className="space-y-2">
                   {userVisits.map((visit, index) => (
-                    <div key={visit.id} className="flex items-center justify-between text-sm py-2 border-b border-gray-100 last:border-b-0">
+                    <div key={visit.id} className="flex items-center justify-between text-sm py-2 border-b last:border-b-0" style={{ borderBottomColor: 'rgba(217, 151, 87, 0.1)' }}>
                       <div className="flex items-center">
-                        <Globe className="h-4 w-4 text-gray-400 ml-2" />
-                        <span>{visit.visitor_ip || 'غير معروف'}</span>
+                        <Globe className="h-4 w-4 ml-2" style={{ color: '#D97757' }} />
+                        <span style={{ color: '#141413' }}>{visit.visitor_ip || 'غير معروف'}</span>
                       </div>
-                      <div className="text-xs text-gray-500">
+                      <div className="text-xs" style={{ color: '#141413', opacity: 0.5 }}>
                         {new Date(visit.visited_at).toLocaleString('ar')}
                       </div>
                     </div>
                   ))}
                 </div>
               ) : (
-                <p className="text-gray-500 text-center py-4">لا توجد زيارات مسجلة</p>
+                <p className="text-center py-4" style={{ color: '#141413', opacity: 0.5 }}>لا توجد زيارات مسجلة</p>
               )}
             </CardContent>
           </Card>
 
-          <div className="flex justify-between items-center pt-4 border-t">
-            <div className="flex space-x-2 space-x-reverse">
-              <Button onClick={() => window.open(`/${user.username}`, '_blank')}>
+          <div className="flex justify-between items-center pt-4 border-t" style={{ borderTopColor: 'rgba(217, 151, 87, 0.2)' }}>
+            <div className="flex gap-2">
+              <Button 
+                onClick={() => window.open(`/${user.username}`, '_blank')}
+                style={{ backgroundColor: '#D97757', color: 'white' }}
+                className="hover:opacity-90 border-0 focus:ring-orange-400"
+              >
                 <Globe className="h-4 w-4 ml-2" />
                 عرض الصفحة
               </Button>
-              <Button variant="outline" onClick={() => window.open(`/dashboard?user=${user.username}`, '_blank')}>
+              <Button 
+                variant="outline" 
+                onClick={() => window.open(`/dashboard?user=${user.username}`, '_blank')}
+                style={{ borderColor: '#D97757', color: '#D97757' }}
+                className="hover:bg-orange-50 border-0 focus:ring-orange-400"
+              >
                 <Settings className="h-4 w-4 ml-2" />
                 لوحة التحكم
               </Button>
             </div>
-            <Button variant="outline" onClick={onClose}>
+            <Button 
+              variant="outline" 
+              onClick={onClose}
+              style={{ borderColor: '#D97757', color: '#D97757' }}
+              className="hover:bg-orange-50 border-0 focus:ring-orange-400"
+            >
               إغلاق
             </Button>
           </div>

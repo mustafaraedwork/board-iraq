@@ -234,7 +234,7 @@ export default function OrderPage() {
             className="text-3xl font-bold mb-2"
             style={{ color: '#141413' }}
           >
-            اطلب كاردك الآن
+            اطلب بطاقتك الآن
           </h1>
           <p style={{ color: '#141413', opacity: 0.7 }}>
             احصل على بطاقتك الذكية وشارك معلوماتك بسهولة
