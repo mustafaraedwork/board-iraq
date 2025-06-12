@@ -1,4 +1,4 @@
-// src/app/order/page.tsx
+// src/app/order/page.tsx - محدث بالهوية البصرية الجديدة مع الاحتفاظ على جميع الوظائف
 'use client';
 
 import React, { useState } from 'react';
@@ -123,30 +123,55 @@ export default function OrderPage() {
 
   if (orderSubmitted && orderResult) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-green-50 via-white to-blue-50 flex items-center justify-center p-4" dir="rtl">
-        <div className="max-w-md w-full bg-white rounded-2xl shadow-2xl p-8 text-center">
-          <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
-            <CheckCircle className="h-10 w-10 text-green-600" />
+      <div 
+        className="min-h-screen flex items-center justify-center p-4" 
+        style={{ backgroundColor: '#F0EEE6' }}
+        dir="rtl"
+      >
+        <div 
+          className="max-w-md w-full rounded-2xl shadow-2xl p-8 text-center border-0"
+          style={{ backgroundColor: 'rgba(255, 255, 255, 0.95)' }}
+        >
+          <div 
+            className="w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6"
+            style={{ backgroundColor: 'rgba(16, 185, 129, 0.1)' }}
+          >
+            <CheckCircle className="h-10 w-10" style={{ color: '#10b981' }} />
           </div>
           
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">
+          <h2 
+            className="text-2xl font-bold mb-4"
+            style={{ color: '#141413' }}
+          >
             تم استلام طلبك بنجاح!
           </h2>
           
-          <div className="bg-blue-50 rounded-xl p-4 mb-6">
-            <div className="text-blue-800 text-sm space-y-1">
+          <div 
+            className="rounded-xl p-4 mb-6"
+            style={{ backgroundColor: 'rgba(217, 151, 87, 0.1)' }}
+          >
+            <div className="text-sm space-y-1" style={{ color: '#141413' }}>
               <p><strong>رقم الطلب:</strong> {orderResult.orderNumber}</p>
               <p><strong>المجموع:</strong> {orderResult.totalAmount?.toLocaleString()} دينار</p>
               <p><strong>الكمية:</strong> {formData.quantity} {formData.quantity === 1 ? 'بطاقة' : 'بطاقات'}</p>
             </div>
           </div>
           
-          <p className="text-gray-600 mb-6 leading-relaxed">
+          <p 
+            className="mb-6 leading-relaxed"
+            style={{ color: '#141413', opacity: 0.7 }}
+          >
             شكراً لك! سيتم التواصل معك خلال 24 ساعة لتأكيد الطلب وترتيب التوصيل.
           </p>
           
-          <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-4 mb-6">
-            <p className="text-yellow-800 text-sm">
+          <div 
+            className="border rounded-xl p-4 mb-6"
+            style={{ 
+              backgroundColor: 'rgba(252, 211, 77, 0.1)',
+              borderColor: 'rgba(252, 211, 77, 0.3)'
+            }}
+          >
+            <p className="text-sm" style={{ color: '#141413' }}>
               <strong>📝 تذكير:</strong> الدفع عند التوصيل
             </p>
           </div>
@@ -166,14 +191,19 @@ export default function OrderPage() {
                   notes: ''
                 });
               }}
-              className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 rounded-xl font-medium hover:shadow-lg transition-all duration-200"
+              className="w-full text-white py-3 rounded-xl font-medium hover:opacity-90 transition-all duration-200"
+              style={{ backgroundColor: '#D97757' }}
             >
               طلب جديد
             </button>
             
             <button 
               onClick={() => window.location.href = '/'}
-              className="w-full bg-gray-100 text-gray-700 py-3 rounded-xl font-medium hover:bg-gray-200 transition-all duration-200"
+              className="w-full py-3 rounded-xl font-medium hover:opacity-80 transition-all duration-200"
+              style={{ 
+                backgroundColor: 'rgba(20, 20, 19, 0.1)',
+                color: '#141413'
+              }}
             >
               العودة للصفحة الرئيسية
             </button>
@@ -184,18 +214,29 @@ export default function OrderPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 py-8 px-4" dir="rtl">
+    <div 
+      className="min-h-screen py-8 px-4" 
+      style={{ backgroundColor: '#F0EEE6' }}
+      dir="rtl"
+    >
       <div className="max-w-4xl mx-auto">
         
         {/* Header */}
         <div className="text-center mb-8">
-          <div className="w-16 h-16 bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
-            <CreditCard className="h-8 w-8 text-white" />
+          <div className="flex justify-center mb-4">
+            <img 
+              src="/logo.svg" 
+              alt="Board Iraq Logo" 
+              className="h-16 w-auto"
+            />
           </div>
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
+          <h1 
+            className="text-3xl font-bold mb-2"
+            style={{ color: '#141413' }}
+          >
             اطلب كاردك الآن
           </h1>
-          <p className="text-gray-600">
+          <p style={{ color: '#141413', opacity: 0.7 }}>
             احصل على بطاقتك الذكية وشارك معلوماتك بسهولة
           </p>
         </div>
@@ -203,7 +244,13 @@ export default function OrderPage() {
         {/* عرض الأخطاء */}
         {error && (
           <div className="max-w-2xl mx-auto mb-6">
-            <div className="bg-red-50 border border-red-200 rounded-xl p-4 flex items-center">
+            <div 
+              className="border rounded-xl p-4 flex items-center"
+              style={{ 
+                backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                borderColor: 'rgba(239, 68, 68, 0.3)'
+              }}
+            >
               <AlertCircle className="h-5 w-5 text-red-500 ml-3 flex-shrink-0" />
               <p className="text-red-800 text-sm">{error}</p>
             </div>
@@ -214,15 +261,26 @@ export default function OrderPage() {
           
           {/* صورة الكارد */}
           <div className="order-2 lg:order-1">
-            <div className="bg-white rounded-2xl shadow-xl p-6">
-              <h3 className="text-xl font-bold text-gray-900 mb-4 text-center">
+            <div 
+              className="rounded-2xl shadow-xl p-6 border-0"
+              style={{ backgroundColor: 'rgba(255, 255, 255, 0.95)' }}
+            >
+              <h3 
+                className="text-xl font-bold mb-4 text-center"
+                style={{ color: '#141413' }}
+              >
                 البطاقة الذكية
               </h3>
               
               <div className="relative">
-                {/* صورة الكارد - يمكن استبدالها لاحقاً */}
-                <div className="w-full h-60 bg-gradient-to-br from-blue-600 via-purple-600 to-pink-600 rounded-xl flex items-center justify-center relative overflow-hidden">
-                  <div className="absolute inset-0 bg-black bg-opacity-20"></div>
+                {/* صورة الكارد */}
+                <div 
+                  className="w-full h-60 rounded-xl flex items-center justify-center relative overflow-hidden"
+                  style={{ 
+                    background: 'linear-gradient(135deg, #D97757 0%, #a8563f 50%, #8b4332 100%)'
+                  }}
+                >
+                  <div className="absolute inset-0 bg-black bg-opacity-10"></div>
                   <div className="relative z-10 text-center text-white">
                     <CreditCard className="h-16 w-16 mx-auto mb-4" />
                     <h4 className="text-xl font-bold mb-2">Board Iraq</h4>
@@ -232,28 +290,53 @@ export default function OrderPage() {
                 
                 {/* مميزات الكارد */}
                 <div className="mt-6 space-y-3">
-                  <div className="flex items-center text-gray-700">
-                    <div className="w-2 h-2 bg-green-500 rounded-full ml-3"></div>
+                  <div className="flex items-center" style={{ color: '#141413' }}>
+                    <div 
+                      className="w-2 h-2 rounded-full ml-3"
+                      style={{ backgroundColor: '#10b981' }}
+                    ></div>
                     <span className="text-sm">تقنية NFC للمشاركة السريعة</span>
                   </div>
-                  <div className="flex items-center text-gray-700">
-                    <div className="w-2 h-2 bg-green-500 rounded-full ml-3"></div>
+                  <div className="flex items-center" style={{ color: '#141413' }}>
+                    <div 
+                      className="w-2 h-2 rounded-full ml-3"
+                      style={{ backgroundColor: '#10b981' }}
+                    ></div>
                     <span className="text-sm">تصميم عصري وأنيق</span>
                   </div>
-                  <div className="flex items-center text-gray-700">
-                    <div className="w-2 h-2 bg-green-500 rounded-full ml-3"></div>
+                  <div className="flex items-center" style={{ color: '#141413' }}>
+                    <div 
+                      className="w-2 h-2 rounded-full ml-3"
+                      style={{ backgroundColor: '#10b981' }}
+                    ></div>
                     <span className="text-sm">مقاوم للماء والخدوش</span>
                   </div>
-                  <div className="flex items-center text-gray-700">
-                    <div className="w-2 h-2 bg-green-500 rounded-full ml-3"></div>
+                  <div className="flex items-center" style={{ color: '#141413' }}>
+                    <div 
+                      className="w-2 h-2 rounded-full ml-3"
+                      style={{ backgroundColor: '#10b981' }}
+                    ></div>
                     <span className="text-sm">ربط فوري بملفك الشخصي</span>
                   </div>
                 </div>
                 
                 {/* السعر */}
-                <div className="mt-6 bg-gradient-to-r from-green-50 to-blue-50 rounded-xl p-4 text-center">
-                  <div className="text-2xl font-bold text-gray-900">25,000 دينار</div>
-                  <div className="text-sm text-gray-600">شامل التوصيل</div>
+                <div 
+                  className="mt-6 rounded-xl p-4 text-center"
+                  style={{ backgroundColor: 'rgba(217, 151, 87, 0.1)' }}
+                >
+                  <div 
+                    className="text-2xl font-bold"
+                    style={{ color: '#141413' }}
+                  >
+                    15,000 دينار
+                  </div>
+                  <div 
+                    className="text-sm"
+                    style={{ color: '#141413', opacity: 0.7 }}
+                  >
+                    شامل التوصيل
+                  </div>
                 </div>
               </div>
             </div>
@@ -261,8 +344,14 @@ export default function OrderPage() {
 
           {/* نموذج الطلب */}
           <div className="order-1 lg:order-2">
-            <div className="bg-white rounded-2xl shadow-xl p-6">
-              <h3 className="text-xl font-bold text-gray-900 mb-6">
+            <div 
+              className="rounded-2xl shadow-xl p-6 border-0"
+              style={{ backgroundColor: 'rgba(255, 255, 255, 0.95)' }}
+            >
+              <h3 
+                className="text-xl font-bold mb-6"
+                style={{ color: '#141413' }}
+              >
                 معلومات الطلب
               </h3>
               
@@ -270,7 +359,10 @@ export default function OrderPage() {
                 
                 {/* الاسم الكامل */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label 
+                    className="block text-sm font-medium mb-2"
+                    style={{ color: '#141413' }}
+                  >
                     <User className="h-4 w-4 inline ml-2" />
                     الاسم الكامل *
                   </label>
@@ -279,14 +371,17 @@ export default function OrderPage() {
                     name="fullName"
                     value={formData.fullName}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:border-transparent focus:ring-orange-400 transition-all duration-200"
                     placeholder="أدخل اسمك الكامل"
                   />
                 </div>
 
                 {/* رقم الهاتف */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label 
+                    className="block text-sm font-medium mb-2"
+                    style={{ color: '#141413' }}
+                  >
                     <Phone className="h-4 w-4 inline ml-2" />
                     رقم الهاتف *
                   </label>
@@ -295,14 +390,17 @@ export default function OrderPage() {
                     name="phone"
                     value={formData.phone}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:border-transparent focus:ring-orange-400 transition-all duration-200"
                     placeholder="07XX XXX XXXX"
                   />
                 </div>
 
                 {/* المحافظة */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label 
+                    className="block text-sm font-medium mb-2"
+                    style={{ color: '#141413' }}
+                  >
                     <MapPin className="h-4 w-4 inline ml-2" />
                     المحافظة *
                   </label>
@@ -310,7 +408,7 @@ export default function OrderPage() {
                     name="governorate"
                     value={formData.governorate}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:border-transparent focus:ring-orange-400 transition-all duration-200"
                   >
                     <option value="">اختر المحافظة</option>
                     {governorates.map(gov => (
@@ -321,7 +419,10 @@ export default function OrderPage() {
 
                 {/* المنطقة */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label 
+                    className="block text-sm font-medium mb-2"
+                    style={{ color: '#141413' }}
+                  >
                     المنطقة *
                   </label>
                   <input
@@ -329,14 +430,17 @@ export default function OrderPage() {
                     name="area"
                     value={formData.area}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:border-transparent focus:ring-orange-400 transition-all duration-200"
                     placeholder="اسم المنطقة أو الحي"
                   />
                 </div>
 
                 {/* أقرب نقطة دالة */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label 
+                    className="block text-sm font-medium mb-2"
+                    style={{ color: '#141413' }}
+                  >
                     أقرب نقطة دالة *
                   </label>
                   <input
@@ -344,14 +448,17 @@ export default function OrderPage() {
                     name="nearestLandmark"
                     value={formData.nearestLandmark}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:border-transparent focus:ring-orange-400 transition-all duration-200"
                     placeholder="مثال: مول، مسجد، مدرسة، محطة وقود"
                   />
                 </div>
 
                 {/* الكمية */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label 
+                    className="block text-sm font-medium mb-2"
+                    style={{ color: '#141413' }}
+                  >
                     <Package className="h-4 w-4 inline ml-2" />
                     الكمية *
                   </label>
@@ -359,7 +466,7 @@ export default function OrderPage() {
                     name="quantity"
                     value={formData.quantity}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:border-transparent focus:ring-orange-400 transition-all duration-200"
                   >
                     {[1,2,3,4,5,6,7,8,9,10].map(num => (
                       <option key={num} value={num}>
@@ -371,7 +478,10 @@ export default function OrderPage() {
 
                 {/* الملاحظات */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label 
+                    className="block text-sm font-medium mb-2"
+                    style={{ color: '#141413' }}
+                  >
                     <MessageSquare className="h-4 w-4 inline ml-2" />
                     ملاحظات إضافية
                   </label>
@@ -380,27 +490,39 @@ export default function OrderPage() {
                     value={formData.notes}
                     onChange={handleInputChange}
                     rows={3}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 resize-none"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:border-transparent focus:ring-orange-400 transition-all duration-200 resize-none"
                     placeholder="أي ملاحظات أو طلبات خاصة..."
                   />
                 </div>
 
                 {/* ملاحظة الدفع */}
-                <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-4">
-                  <p className="text-yellow-800 text-sm">
+                <div 
+                  className="border rounded-xl p-4"
+                  style={{ 
+                    backgroundColor: 'rgba(252, 211, 77, 0.1)',
+                    borderColor: 'rgba(252, 211, 77, 0.3)'
+                  }}
+                >
+                  <p className="text-sm" style={{ color: '#141413' }}>
                     <strong>📝 ملاحظة مهمة:</strong> الدفع عند التوصيل - لا حاجة للدفع المسبق
                   </p>
                 </div>
 
                 {/* المجموع */}
-                <div className="bg-gray-50 rounded-xl p-4">
+                <div 
+                  className="rounded-xl p-4"
+                  style={{ backgroundColor: 'rgba(217, 151, 87, 0.1)' }}
+                >
                   <div className="flex justify-between items-center text-lg font-bold">
-                    <span>المجموع الكلي:</span>
-                    <span className="text-green-600">
-                      {(formData.quantity * 25000).toLocaleString()} دينار
+                    <span style={{ color: '#141413' }}>المجموع الكلي:</span>
+                    <span style={{ color: '#10b981' }}>
+                      {(formData.quantity * 15000).toLocaleString()} دينار
                     </span>
                   </div>
-                  <div className="text-sm text-gray-600 mt-1">
+                  <div 
+                    className="text-sm mt-1"
+                    style={{ color: '#141413', opacity: 0.7 }}
+                  >
                     شامل التوصيل المجاني
                   </div>
                 </div>
@@ -409,7 +531,8 @@ export default function OrderPage() {
                 <button
                   onClick={handleSubmit}
                   disabled={isSubmitting}
-                  className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-4 rounded-xl font-bold text-lg hover:shadow-lg transform hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full text-white py-4 rounded-xl font-bold text-lg hover:opacity-90 transform hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                  style={{ backgroundColor: '#D97757' }}
                 >
                   {isSubmitting ? (
                     <div className="flex items-center justify-center">
@@ -427,28 +550,46 @@ export default function OrderPage() {
 
         {/* معلومات إضافية */}
         <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="bg-white rounded-2xl p-6 text-center shadow-lg">
-            <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <Package className="h-6 w-6 text-green-600" />
+          <div 
+            className="rounded-2xl p-6 text-center shadow-lg border-0"
+            style={{ backgroundColor: 'rgba(255, 255, 255, 0.95)' }}
+          >
+            <div 
+              className="w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4"
+              style={{ backgroundColor: 'rgba(16, 185, 129, 0.1)' }}
+            >
+              <Package className="h-6 w-6" style={{ color: '#10b981' }} />
             </div>
-            <h4 className="font-bold text-gray-900 mb-2">توصيل مجاني</h4>
-            <p className="text-gray-600 text-sm">توصيل مجاني لجميع المحافظات</p>
+            <h4 className="font-bold mb-2" style={{ color: '#141413' }}>توصيل مجاني</h4>
+            <p className="text-sm" style={{ color: '#141413', opacity: 0.7 }}>توصيل مجاني لجميع المحافظات</p>
           </div>
           
-          <div className="bg-white rounded-2xl p-6 text-center shadow-lg">
-            <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <CheckCircle className="h-6 w-6 text-blue-600" />
+          <div 
+            className="rounded-2xl p-6 text-center shadow-lg border-0"
+            style={{ backgroundColor: 'rgba(255, 255, 255, 0.95)' }}
+          >
+            <div 
+              className="w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4"
+              style={{ backgroundColor: 'rgba(217, 151, 87, 0.1)' }}
+            >
+              <CheckCircle className="h-6 w-6" style={{ color: '#D97757' }} />
             </div>
-            <h4 className="font-bold text-gray-900 mb-2">جودة عالية</h4>
-            <p className="text-gray-600 text-sm">مواد متينة ومقاومة للاستخدام</p>
+            <h4 className="font-bold mb-2" style={{ color: '#141413' }}>جودة عالية</h4>
+            <p className="text-sm" style={{ color: '#141413', opacity: 0.7 }}>مواد متينة ومقاومة للاستخدام</p>
           </div>
           
-          <div className="bg-white rounded-2xl p-6 text-center shadow-lg">
-            <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <Phone className="h-6 w-6 text-purple-600" />
+          <div 
+            className="rounded-2xl p-6 text-center shadow-lg border-0"
+            style={{ backgroundColor: 'rgba(255, 255, 255, 0.95)' }}
+          >
+            <div 
+              className="w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4"
+              style={{ backgroundColor: 'rgba(139, 92, 246, 0.1)' }}
+            >
+              <Phone className="h-6 w-6" style={{ color: '#8b5cf6' }} />
             </div>
-            <h4 className="font-bold text-gray-900 mb-2">دعم فني</h4>
-            <p className="text-gray-600 text-sm">مساعدة فنية على مدار الساعة</p>
+            <h4 className="font-bold mb-2" style={{ color: '#141413' }}>دعم فني</h4>
+            <p className="text-sm" style={{ color: '#141413', opacity: 0.7 }}>مساعدة فنية على مدار الساعة</p>
           </div>
         </div>
       </div>
