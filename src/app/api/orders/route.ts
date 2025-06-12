@@ -25,7 +25,7 @@ export async function POST(request: NextRequest) {
     }
 
     // حساب المجموع
-    const unitPrice = 25000;
+    const unitPrice = 15000;
     const totalAmount = quantity * unitPrice;
 
     // إدراج الطلب في قاعدة البيانات
