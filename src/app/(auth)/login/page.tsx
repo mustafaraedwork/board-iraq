@@ -1,4 +1,4 @@
-// src/app/(auth)/login/page.tsx
+// src/app/(auth)/login/page.tsx - محدث بالهوية البصرية الجديدة مع الاحتفاظ على جميع الوظائف
 'use client';
 
 import { useState } from 'react';
@@ -84,33 +84,48 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 flex items-center justify-center py-12 px-4" dir="rtl">
+    <div 
+      className="min-h-screen flex items-center justify-center py-12 px-4" 
+      style={{ backgroundColor: '#F0EEE6' }}
+      dir="rtl"
+    >
       <div className="max-w-md w-full">
-        {/* Header */}
         <div className="text-center mb-8">
           <Link href="/" className="inline-flex items-center space-x-2 space-x-reverse">
-            <div className="w-12 h-12 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
-              <CreditCard className="h-7 w-7 text-white" />
-            </div>
-            <span className="text-2xl font-bold text-gray-900">Board Iraq</span>
+            <img 
+              src="/logo.svg" 
+              alt="Board Iraq Logo" 
+              className="h-16 w-auto"
+            />
           </Link>
         </div>
 
-        {/* Login Card */}
-        <Card className="shadow-lg">
+        <Card 
+          className="shadow-lg border-0"
+          style={{ backgroundColor: 'rgba(255, 255, 255, 0.9)' }}
+        >
           <CardHeader className="text-center">
-            <CardTitle className="text-2xl font-bold text-gray-900">
+            <CardTitle 
+              className="text-2xl font-bold"
+              style={{ color: '#141413' }}
+            >
               تسجيل الدخول
             </CardTitle>
-            <p className="text-gray-600">
+            <p style={{ color: '#141413', opacity: 0.7 }}>
               ادخل إلى لوحة التحكم الخاصة بك
             </p>
           </CardHeader>
           <CardContent className="space-y-6">
             
-            {/* رسالة الخطأ */}
             {error && (
-              <div className="flex items-center space-x-2 space-x-reverse p-3 bg-red-50 border border-red-200 rounded-md text-red-600">
+              <div 
+                className="flex items-center space-x-2 space-x-reverse p-3 rounded-md border"
+                style={{ 
+                  backgroundColor: 'rgba(239, 68, 68, 0.1)', 
+                  borderColor: 'rgba(239, 68, 68, 0.3)',
+                  color: '#dc2626'
+                }}
+              >
                 <AlertCircle className="h-4 w-4" />
                 <span className="text-sm">{error}</span>
               </div>
@@ -119,7 +134,10 @@ export default function LoginPage() {
             <div className="space-y-4">
               {/* حقل اسم المستخدم */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label 
+                  className="block text-sm font-medium mb-2"
+                  style={{ color: '#141413' }}
+                >
                   اسم المستخدم
                 </label>
                 <div className="relative">
@@ -130,7 +148,7 @@ export default function LoginPage() {
                     type="text"
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
-                    className="w-full pr-10 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full pr-10 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:border-transparent focus:ring-orange-400"
                     placeholder="ادخل اسم المستخدم"
                     dir="ltr"
                     disabled={loading}
@@ -140,7 +158,10 @@ export default function LoginPage() {
               
               {/* حقل كلمة المرور */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label 
+                  className="block text-sm font-medium mb-2"
+                  style={{ color: '#141413' }}
+                >
                   كلمة المرور
                 </label>
                 <div className="relative">
@@ -151,7 +172,7 @@ export default function LoginPage() {
                     type="password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="w-full pr-10 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full pr-10 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:border-transparent focus:ring-orange-400"
                     placeholder="ادخل كلمة المرور"
                     dir="ltr"
                     disabled={loading}
@@ -160,10 +181,10 @@ export default function LoginPage() {
                 </div>
               </div>
               
-              {/* زر تسجيل الدخول */}
               <Button 
                 onClick={handleLogin}
-                className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
+                className="w-full text-white border-0 hover:opacity-90 transition-opacity"
+                style={{ backgroundColor: '#D97757' }}
                 disabled={loading}
               >
                 {loading ? (
@@ -178,28 +199,27 @@ export default function LoginPage() {
             </div>
             
             <div className="text-center">
-              <p className="text-sm text-gray-600">
+              <p className="text-sm" style={{ color: '#141413', opacity: 0.7 }}>
                 ليس لديك حساب؟{' '}
                 <button
                   type="button"
                   onClick={() => router.push('/register')}
-                  className="text-blue-600 hover:text-blue-500 font-medium"
+                  className="font-medium hover:opacity-80 transition-opacity"
+                  style={{ color: '#D97757' }}
                 >
                   إنشاء حساب جديد
                 </button>
-              </p>
-            </div>
-            
-            <div className="bg-blue-50 border border-blue-200 rounded-md p-4">
-              <p className="text-sm text-blue-800">
-                💡 <strong>للاختبار:</strong> استخدم الحسابات التي تم إنشاؤها من لوحة الإدارة، أو <code>demo123</code> للأدمن
               </p>
             </div>
           </CardContent>
         </Card>
         
         <div className="text-center mt-6">
-          <Link href="/" className="text-sm text-gray-600 hover:text-gray-500">
+          <Link 
+            href="/" 
+            className="text-sm hover:opacity-80 transition-opacity"
+            style={{ color: '#141413' }}
+          >
             ← العودة للصفحة الرئيسية
           </Link>
         </div>
