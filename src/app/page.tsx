@@ -85,7 +85,7 @@ export default function HomePage() {
               <img 
                 src="/logo.svg" 
                 alt="Board Iraq Logo" 
-                className="h-12 w-auto"
+                className="h-10 w-auto"
               />
             </div>
             
