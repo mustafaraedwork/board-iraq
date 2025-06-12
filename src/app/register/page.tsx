@@ -1,4 +1,4 @@
-// src/app/register/page.tsx
+// src/app/register/page.tsx - محدث بالهوية البصرية الجديدة مع الاحتفاظ على جميع الوظائف
 'use client';
 
 import { useState } from 'react';
@@ -138,17 +138,30 @@ export default function RegisterPage() {
 
   if (success) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 flex items-center justify-center py-12 px-4" dir="rtl">
-        <Card className="w-full max-w-md">
+      <div 
+        className="min-h-screen flex items-center justify-center py-12 px-4" 
+        style={{ backgroundColor: '#F0EEE6' }}
+        dir="rtl"
+      >
+        <Card 
+          className="w-full max-w-md border-0"
+          style={{ backgroundColor: 'rgba(255, 255, 255, 0.9)' }}
+        >
           <CardContent className="p-8 text-center">
-            <CheckCircle className="h-16 w-16 text-green-500 mx-auto mb-4" />
-            <h2 className="text-2xl font-bold text-gray-900 mb-2">
+            <CheckCircle className="h-16 w-16 mx-auto mb-4" style={{ color: '#10b981' }} />
+            <h2 
+              className="text-2xl font-bold mb-2"
+              style={{ color: '#141413' }}
+            >
               تم إنشاء حسابك بنجاح!
             </h2>
-            <p className="text-gray-600 mb-4">
+            <p 
+              className="mb-4"
+              style={{ color: '#141413', opacity: 0.7 }}
+            >
               مرحباً بك في Board Iraq. سيتم توجيهك للوحة التحكم خلال ثوانٍ...
             </p>
-            <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600 mx-auto"></div>
+            <div className="animate-spin rounded-full h-6 w-6 border-b-2 mx-auto" style={{ borderColor: '#D97757' }}></div>
           </CardContent>
         </Card>
       </div>
@@ -156,26 +169,37 @@ export default function RegisterPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 flex items-center justify-center py-12 px-4" dir="rtl">
+    <div 
+      className="min-h-screen flex items-center justify-center py-12 px-4" 
+      style={{ backgroundColor: '#F0EEE6' }}
+      dir="rtl"
+    >
       <div className="max-w-md w-full">
-        {/* Header */}
+        {/* Header مع اللوجو الجديد */}
         <div className="text-center mb-8">
           <Link href="/" className="inline-flex items-center space-x-2 space-x-reverse">
-            <div className="w-12 h-12 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
-              <CreditCard className="h-7 w-7 text-white" />
-            </div>
-            <span className="text-2xl font-bold text-gray-900">Board Iraq</span>
+            <img 
+              src="/logo.svg" 
+              alt="Board Iraq Logo" 
+              className="h-16 w-auto"
+            />
           </Link>
         </div>
 
         {/* Register Card */}
-        <Card className="shadow-lg">
+        <Card 
+          className="shadow-lg border-0"
+          style={{ backgroundColor: 'rgba(255, 255, 255, 0.9)' }}
+        >
           <CardHeader className="text-center">
-            <CardTitle className="text-2xl font-bold text-gray-900">
+            <CardTitle 
+              className="text-2xl font-bold"
+              style={{ color: '#141413' }}
+            >
               إنشاء حساب جديد
             </CardTitle>
-            <p className="text-gray-600">
-              انضم إلى Board Iraq واحصل على صفحتك الرقمية
+            <p style={{ color: '#141413', opacity: 0.7 }}>
+              انضم إلى BOARD واحصل على صفحتك الرقمية
             </p>
           </CardHeader>
           
@@ -183,7 +207,14 @@ export default function RegisterPage() {
             <form onSubmit={handleSubmit} className="space-y-4">
               {/* رسالة الخطأ */}
               {error && (
-                <div className="flex items-center space-x-2 space-x-reverse p-3 bg-red-50 border border-red-200 rounded-md text-red-600">
+                <div 
+                  className="flex items-center space-x-2 space-x-reverse p-3 rounded-md border"
+                  style={{ 
+                    backgroundColor: 'rgba(239, 68, 68, 0.1)', 
+                    borderColor: 'rgba(239, 68, 68, 0.3)',
+                    color: '#dc2626'
+                  }}
+                >
                   <AlertCircle className="h-4 w-4" />
                   <span className="text-sm">{error}</span>
                 </div>
@@ -191,7 +222,11 @@ export default function RegisterPage() {
               
               {/* حقل اسم المستخدم */}
               <div className="space-y-2">
-                <label htmlFor="username" className="block text-sm font-medium text-gray-700">
+                <label 
+                  htmlFor="username" 
+                  className="block text-sm font-medium"
+                  style={{ color: '#141413' }}
+                >
                   اسم المستخدم *
                 </label>
                 <div className="relative">
@@ -203,7 +238,7 @@ export default function RegisterPage() {
                     id="username"
                     value={formData.username}
                     onChange={(e) => handleChange('username', e.target.value.toLowerCase().replace(/[^a-z0-9]/g, ''))}
-                    className="w-full pr-10 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full pr-10 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:border-transparent focus:ring-orange-400"
                     placeholder="مثال: ahmed123"
                     dir="ltr"
                     disabled={loading}
@@ -216,7 +251,11 @@ export default function RegisterPage() {
               
               {/* حقل كلمة المرور */}
               <div className="space-y-2">
-                <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+                <label 
+                  htmlFor="password" 
+                  className="block text-sm font-medium"
+                  style={{ color: '#141413' }}
+                >
                   كلمة المرور *
                 </label>
                 <div className="relative">
@@ -228,7 +267,7 @@ export default function RegisterPage() {
                     id="password"
                     value={formData.password}
                     onChange={(e) => handleChange('password', e.target.value)}
-                    className="w-full pr-10 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full pr-10 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:border-transparent focus:ring-orange-400"
                     placeholder="ادخل كلمة مرور قوية"
                     dir="ltr"
                     disabled={loading}
@@ -238,7 +277,11 @@ export default function RegisterPage() {
               
               {/* تأكيد كلمة المرور */}
               <div className="space-y-2">
-                <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">
+                <label 
+                  htmlFor="confirmPassword" 
+                  className="block text-sm font-medium"
+                  style={{ color: '#141413' }}
+                >
                   تأكيد كلمة المرور *
                 </label>
                 <div className="relative">
@@ -250,7 +293,7 @@ export default function RegisterPage() {
                     id="confirmPassword"
                     value={formData.confirmPassword}
                     onChange={(e) => handleChange('confirmPassword', e.target.value)}
-                    className="w-full pr-10 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full pr-10 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:border-transparent focus:ring-orange-400"
                     placeholder="أعد إدخال كلمة المرور"
                     dir="ltr"
                     disabled={loading}
@@ -261,7 +304,8 @@ export default function RegisterPage() {
               {/* زر إنشاء الحساب */}
               <Button 
                 type="submit"
-                className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
+                className="w-full text-white border-0 hover:opacity-90 transition-opacity"
+                style={{ backgroundColor: '#D97757' }}
                 disabled={loading}
               >
                 {loading ? (
@@ -277,24 +321,26 @@ export default function RegisterPage() {
             
             {/* رابط تسجيل الدخول */}
             <div className="text-center mt-6">
-              <p className="text-sm text-gray-600">
+              <p className="text-sm" style={{ color: '#141413', opacity: 0.7 }}>
                 لديك حساب بالفعل؟{' '}
-                <Link href="/login" className="text-blue-600 hover:text-blue-500 font-medium">
+                <Link 
+                  href="/login" 
+                  className="font-medium hover:opacity-80 transition-opacity"
+                  style={{ color: '#D97757' }}
+                >
                   تسجيل الدخول
                 </Link>
-              </p>
-            </div>
-            
-            <div className="bg-blue-50 border border-blue-200 rounded-md p-4 mt-6">
-              <p className="text-sm text-blue-800">
-                ✨ <strong>مجاني تماماً!</strong> ستحصل على صفحة شخصية رقمية فورية مع QR Code خاص بك.
               </p>
             </div>
           </CardContent>
         </Card>
         
         <div className="text-center mt-6">
-          <Link href="/" className="text-sm text-gray-600 hover:text-gray-500">
+          <Link 
+            href="/" 
+            className="text-sm hover:opacity-80 transition-opacity"
+            style={{ color: '#141413' }}
+          >
             ← العودة للصفحة الرئيسية
           </Link>
         </div>
