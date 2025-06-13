@@ -1,8 +1,9 @@
-// src/app/admin/orders/page.tsx - Updated with New Brand Identity
+// src/app/admin/orders/page.tsx - Updated with New Brand Identity and Fixed Build Errors
 'use client';
 
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 import { 
   Package, 
   Eye, 
@@ -67,7 +68,6 @@ export default function AdminOrdersPage() {
   // فلاتر
   const [statusFilter, setStatusFilter] = useState('all');
   const [governorateFilter, setGovernorateFilter] = useState('all');
-  const [currentPage, setCurrentPage] = useState(1);
   
   // إحصائيات
   const [stats, setStats] = useState({
@@ -123,49 +123,6 @@ export default function AdminOrdersPage() {
     }
   };
 
-  useEffect(() => {
-    checkAdminPermissions();
-  }, []);
-
-  useEffect(() => {
-    if (hasAdminAccess) {
-      fetchOrders();
-    }
-  }, [currentPage, statusFilter, governorateFilter, hasAdminAccess]);
-
-  const getStatusIcon = (status: string) => {
-    switch (status) {
-      case 'pending': return <Clock className="h-4 w-4" />;
-      case 'confirmed': return <CheckCircle className="h-4 w-4" />;
-      case 'shipped': return <Truck className="h-4 w-4" />;
-      case 'delivered': return <Package className="h-4 w-4" />;
-      case 'cancelled': return <XCircle className="h-4 w-4" />;
-      default: return <Clock className="h-4 w-4" />;
-    }
-  };
-
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'pending': return 'text-yellow-800 border-yellow-200';
-      case 'confirmed': return 'text-blue-800 border-blue-200'; 
-      case 'shipped': return 'text-purple-800 border-purple-200';
-      case 'delivered': return 'text-green-800 border-green-200';
-      case 'cancelled': return 'text-red-800 border-red-200';
-      default: return 'text-gray-800 border-gray-200';
-    }
-  };
-
-  const getStatusBgColor = (status: string) => {
-    switch (status) {
-      case 'pending': return 'rgba(255, 193, 7, 0.1)';
-      case 'confirmed': return 'rgba(0, 123, 255, 0.1)'; 
-      case 'shipped': return 'rgba(108, 117, 125, 0.1)';
-      case 'delivered': return 'rgba(40, 167, 69, 0.1)';
-      case 'cancelled': return 'rgba(220, 53, 69, 0.1)';
-      default: return 'rgba(108, 117, 125, 0.1)';
-    }
-  };
-
   const fetchOrders = async () => {
     if (!hasAdminAccess) return;
     
@@ -174,7 +131,7 @@ export default function AdminOrdersPage() {
     
     try {
       const params = new URLSearchParams({
-        page: currentPage.toString(),
+        page: '1',
         limit: '20',
         ...(statusFilter !== 'all' && { status: statusFilter }),
         ...(governorateFilter !== 'all' && { governorate: governorateFilter })
@@ -207,6 +164,49 @@ export default function AdminOrdersPage() {
       console.error(err);
     } finally {
       setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    checkAdminPermissions();
+  }, []);
+
+  useEffect(() => {
+    if (hasAdminAccess) {
+      fetchOrders();
+    }
+  }, [statusFilter, governorateFilter, hasAdminAccess]);
+
+  const getStatusIcon = (status: string) => {
+    switch (status) {
+      case 'pending': return <Clock className="h-4 w-4" />;
+      case 'confirmed': return <CheckCircle className="h-4 w-4" />;
+      case 'shipped': return <Truck className="h-4 w-4" />;
+      case 'delivered': return <Package className="h-4 w-4" />;
+      case 'cancelled': return <XCircle className="h-4 w-4" />;
+      default: return <Clock className="h-4 w-4" />;
+    }
+  };
+
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case 'pending': return 'text-yellow-800 border-yellow-200';
+      case 'confirmed': return 'text-blue-800 border-blue-200'; 
+      case 'shipped': return 'text-purple-800 border-purple-200';
+      case 'delivered': return 'text-green-800 border-green-200';
+      case 'cancelled': return 'text-red-800 border-red-200';
+      default: return 'text-gray-800 border-gray-200';
+    }
+  };
+
+  const getStatusBgColor = (status: string) => {
+    switch (status) {
+      case 'pending': return 'rgba(255, 193, 7, 0.1)';
+      case 'confirmed': return 'rgba(0, 123, 255, 0.1)'; 
+      case 'shipped': return 'rgba(108, 117, 125, 0.1)';
+      case 'delivered': return 'rgba(40, 167, 69, 0.1)';
+      case 'cancelled': return 'rgba(220, 53, 69, 0.1)';
+      default: return 'rgba(108, 117, 125, 0.1)';
     }
   };
 
@@ -282,7 +282,14 @@ export default function AdminOrdersPage() {
         <div className="rounded-2xl shadow-lg p-6 mb-8 border-0" style={{ backgroundColor: 'rgba(255, 255, 255, 0.9)' }}>
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div className="flex items-center gap-3">
-              <img src="/logo.svg" alt="Board Iraq" className="w-18 h-10" />
+              <Image 
+                src="/logo.svg" 
+                alt="Board Iraq" 
+                width={72}
+                height={40}
+                className="w-18 h-10"
+                priority
+              />
               <div>
                 <h1 className="text-2xl font-bold mb-2" style={{ color: '#141413' }}>
                   إدارة الطلبات - المشرفين فقط
@@ -836,41 +843,6 @@ function AddOrderModal({ onClose, onOrderAdded, governorates }: AddOrderModalPro
                   إضافة الطلب
                 </>
               )}
-            </button>
-            
-            {/* زر تجريبي - يمكن إزالته لاحقاً */}
-            <button
-              type="button"
-              onClick={async () => {
-                if (!validateForm()) return;
-                
-                // محاكاة إضافة الطلب محلياً (للاختبار)
-                const newOrder: Order = {
-                  id: `temp_${Date.now()}`,
-                  full_name: formData.full_name,
-                  phone: formData.phone,
-                  governorate: formData.governorate,
-                  area: formData.area,
-                  nearest_landmark: formData.nearest_landmark,
-                  quantity: formData.quantity,
-                  total_amount: formData.quantity * cardPrice,
-                  status: 'pending',
-                  status_arabic: 'في انتظار التأكيد',
-                  payment_status: 'pending',
-                  notes: formData.notes,
-                  created_at: new Date().toISOString(),
-                  updated_at: new Date().toISOString()
-                };
-                
-                console.log('طلب تجريبي تم إنشاؤه:', newOrder);
-                alert('🧪 تم إنشاء طلب تجريبي - راجع وحدة التحكم');
-                onClose();
-              }}
-              className="px-4 py-2 text-white rounded-lg transition-colors hover:opacity-90 border-0 focus:ring-2 focus:ring-blue-400"
-              style={{ backgroundColor: '#6c757d' }}
-              title="لأغراض الاختبار - يمكن حذفه لاحقاً"
-            >
-              🧪 اختبار
             </button>
             
             <button

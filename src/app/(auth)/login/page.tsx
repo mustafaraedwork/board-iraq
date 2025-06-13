@@ -1,12 +1,13 @@
-// src/app/(auth)/login/page.tsx - محدث بالهوية البصرية الجديدة مع الاحتفاظ على جميع الوظائف
+// src/app/(auth)/login/page.tsx - محدث بالهوية البصرية الجديدة مع إصلاح أخطاء البناء
 'use client';
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import Image from 'next/image';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { CreditCard, User, Lock, Loader2, AlertCircle } from 'lucide-react';
+import { User, Lock, Loader2, AlertCircle } from 'lucide-react';
 import { supabase } from '@/lib/supabase/client';
 
 export default function LoginPage() {
@@ -92,10 +93,13 @@ export default function LoginPage() {
       <div className="max-w-md w-full">
         <div className="text-center mb-8">
           <Link href="/" className="inline-flex items-center space-x-2 space-x-reverse">
-            <img 
+            <Image 
               src="/logo.svg" 
               alt="Board Iraq Logo" 
+              width={64}
+              height={64}
               className="h-16 w-auto"
+              priority
             />
           </Link>
         </div>

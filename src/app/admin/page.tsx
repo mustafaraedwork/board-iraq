@@ -7,14 +7,12 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { 
   Users, 
-  CreditCard, 
   BarChart3, 
   Download,
   Plus,
   Search,
   Filter,
   Eye,
-  Edit,
   Trash2,
   TrendingUp,
   CheckCircle,
@@ -44,7 +42,6 @@ import {
   downloadQRCodesZip, 
   downloadAllQRCodes 
 } from '@/lib/supabase/batch-users';
-import { UserService } from '@/lib/supabase/server';
 import { AuthService, AdminService } from '@/lib/utils';
 import { supabase } from '@/lib/supabase/client';
 
