@@ -1,8 +1,40 @@
 // src/app/api/orders/stats/route.ts
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import { supabase } from '@/lib/supabase/client';
 
-export async function GET(request: NextRequest) {
+// تعريف أنواع البيانات
+interface Order {
+  created_at: string;
+  total_amount: number;
+  status: string;
+}
+
+interface DailyStatsData {
+  [key: string]: {
+    date: string;
+    orders: number;
+    revenue: number;
+    pending: number;
+    confirmed: number;
+    shipped: number;
+    delivered: number;
+    cancelled: number;
+  };
+}
+
+interface ProcessedDailyStats {
+  date: string;
+  orders: number;
+  revenue: number;
+  pending: number;
+  confirmed: number;
+  shipped: number;
+  delivered: number;
+  cancelled: number;
+}
+
+// إزالة request غير المستخدم
+export async function GET() {
   try {
     // جلب الإحصائيات العامة
     const { data: generalStats, error: generalError } = await supabase
@@ -76,9 +108,9 @@ export async function GET(request: NextRequest) {
   }
 }
 
-// دالة لمعالجة الإحصائيات اليومية
-function processDailyStats(orders: any[]) {
-  const dailyData: { [key: string]: any } = {};
+// دالة لمعالجة الإحصائيات اليومية - استبدال any بأنواع محددة
+function processDailyStats(orders: Order[]): ProcessedDailyStats[] {
+  const dailyData: DailyStatsData = {};
 
   orders.forEach(order => {
     const date = new Date(order.created_at).toISOString().split('T')[0];
@@ -98,10 +130,15 @@ function processDailyStats(orders: any[]) {
 
     dailyData[date].orders++;
     dailyData[date].revenue += order.total_amount || 0;
-    dailyData[date][order.status]++;
+    
+    // تحسين طريقة تحديث الحالات
+    const status = order.status as keyof Omit<ProcessedDailyStats, 'date' | 'orders' | 'revenue'>;
+    if (dailyData[date][status] !== undefined) {
+      dailyData[date][status]++;
+    }
   });
 
-  return Object.values(dailyData).sort((a: any, b: any) => 
+  return Object.values(dailyData).sort((a, b) => 
     new Date(a.date).getTime() - new Date(b.date).getTime()
   );
 }

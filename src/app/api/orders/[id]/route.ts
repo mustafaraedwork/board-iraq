@@ -2,6 +2,17 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabase } from '@/lib/supabase/client';
 
+// تعريف أنواع البيانات
+interface UpdateData {
+  status?: string;
+  delivery_date?: string;
+  delivery_notes?: string;
+  tracking_number?: string;
+  admin_notes?: string;
+  priority_level?: string;
+  updated_at?: string;
+}
+
 // تحديث طلب معين
 export async function PATCH(
   request: NextRequest,
@@ -22,12 +33,12 @@ export async function PATCH(
     // الحقول المسموح بتحديثها
     const allowedFields = ['status', 'delivery_date', 'delivery_notes', 'tracking_number', 'admin_notes', 'priority_level'];
     
-    const updateData: any = {};
+    const updateData: UpdateData = {};
     
     // فلترة الحقول المسموحة فقط
     Object.keys(body).forEach(key => {
       if (allowedFields.includes(key) && body[key] !== undefined) {
-        updateData[key] = body[key];
+        updateData[key as keyof UpdateData] = body[key];
       }
     });
 
@@ -117,8 +128,8 @@ export async function GET(
       );
     }
 
-    // جلب تاريخ تغيير الحالات
-    const { data: statusHistory, error: historyError } = await supabase
+    // جلب تاريخ تغيير الحالات - إزالة المتغير غير المستخدم
+    const { data: statusHistory } = await supabase
       .from('order_status_history')
       .select('*')
       .eq('order_id', id)

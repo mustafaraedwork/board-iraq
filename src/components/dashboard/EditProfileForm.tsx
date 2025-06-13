@@ -2,6 +2,7 @@
 'use client';
 
 import { useState, useRef } from 'react';
+import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { X, Save, Upload, User as UserIcon, Edit } from 'lucide-react';
@@ -194,9 +195,11 @@ export default function EditProfileForm({ user, onClose, onSave }: EditProfileFo
               <div className="flex items-center space-x-4 space-x-reverse">
                 <div className="w-20 h-20 rounded-lg overflow-hidden bg-gray-100 border-2 border-gray-300">
                   {formData.profile_image_url ? (
-                    <img
+                    <Image
                       src={formData.profile_image_url}
                       alt="صورة شخصية"
+                      width={80}
+                      height={80}
                       className="w-full h-full object-cover"
                     />
                   ) : (
@@ -281,14 +284,14 @@ export default function EditProfileForm({ user, onClose, onSave }: EditProfileFo
                 onChange={(e) => handleChange('bio', e.target.value)}
                 rows={3}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="✨ مرحباً! أستكشف الإبداع والإيجابية يوماً واحداً في كل مرة! 🌟"
+                placeholder="أدخل وصف مختصر عن نفسك..."
               />
             </div>
 
             {/* ملاحظة للإيميل والهاتف */}
             <div className="mt-4 p-4 bg-blue-50 rounded-lg border border-blue-200">
               <p className="text-sm text-blue-800">
-                💡 <strong>ملاحظة:</strong> لإضافة رقم الهاتف أو البريد الإلكتروني، استخدم قسم "إضافة رابط" أسفل هذه الصفحة.
+                💡 <strong>ملاحظة:</strong> لإضافة رقم الهاتف أو البريد الإلكتروني، استخدم قسم &quot;إضافة رابط&quot; أسفل هذه الصفحة.
               </p>
             </div>
           </div>
@@ -443,9 +446,11 @@ export default function EditProfileForm({ user, onClose, onSave }: EditProfileFo
                     <div className="flex flex-col items-center pt-8 pb-6">
                       <div className="relative">
                         {formData.profile_image_url ? (
-                          <img
+                          <Image
                             src={formData.profile_image_url}
                             alt="معاينة"
+                            width={96}
+                            height={96}
                             className="w-24 h-24 rounded-full object-cover border-3 border-white border-opacity-20"
                           />
                         ) : (

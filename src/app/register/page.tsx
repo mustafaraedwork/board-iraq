@@ -4,11 +4,11 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import Image from 'next/image';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { User, Lock, CreditCard, Loader2, AlertCircle, CheckCircle } from 'lucide-react';
+import { User, Lock, Loader2, AlertCircle, CheckCircle } from 'lucide-react';
 import { supabase } from '@/lib/supabase/client';
-import QRCode from 'qrcode';
 
 export default function RegisterPage() {
   const [formData, setFormData] = useState({
@@ -60,13 +60,23 @@ export default function RegisterPage() {
   };
 
   const checkUsernameAvailability = async (username: string) => {
-    const { data, error } = await supabase
-      .from('users')
-      .select('username')
-      .eq('username', username)
-      .limit(1);
-    
-    return data && data.length === 0;
+    try {
+      const { data, error } = await supabase
+        .from('users')
+        .select('username')
+        .eq('username', username)
+        .limit(1);
+      
+      if (error) {
+        console.error('Error checking username availability:', error);
+        return false;
+      }
+      
+      return data && data.length === 0;
+    } catch (error) {
+      console.error('Error checking username availability:', error);
+      return false;
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -106,8 +116,15 @@ export default function RegisterPage() {
         .single();
 
       if (insertError) {
+        console.error('Registration error:', insertError);
         setError('حدث خطأ في إنشاء الحساب. يرجى المحاولة مرة أخرى');
-        console.error('خطأ في إنشاء المستخدم:', insertError);
+        setLoading(false);
+        return;
+      }
+
+      if (!newUser) {
+        console.error('No user data returned from registration');
+        setError('حدث خطأ في إنشاء الحساب. يرجى المحاولة مرة أخرى');
         setLoading(false);
         return;
       }
@@ -129,7 +146,7 @@ export default function RegisterPage() {
       }, 2000);
 
     } catch (error) {
-      console.error('خطأ في التسجيل:', error);
+      console.error('Registration error:', error);
       setError('حدث خطأ في النظام. يرجى المحاولة مرة أخرى');
     } finally {
       setLoading(false);
@@ -178,9 +195,11 @@ export default function RegisterPage() {
         {/* Header مع اللوجو الجديد */}
         <div className="text-center mb-8">
           <Link href="/" className="inline-flex items-center space-x-2 space-x-reverse">
-            <img 
+            <Image 
               src="/logo.svg" 
               alt="Board Iraq Logo" 
+              width={64}
+              height={64}
               className="h-16 w-auto"
             />
           </Link>

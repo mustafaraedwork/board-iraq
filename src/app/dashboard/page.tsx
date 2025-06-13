@@ -1,8 +1,9 @@
 // src/app/dashboard/page.tsx - محدث بالهوية البصرية الجديدة مع الاحتفاظ على جميع الوظائف
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 import { AuthService } from '@/lib/utils';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -11,7 +12,6 @@ import {
   Edit, 
   QrCode, 
   Download, 
-  Settings, 
   Plus,
   BarChart3,
   Users,
@@ -144,12 +144,8 @@ export default function DashboardPage() {
     })
   );
 
-  // تحميل بيانات المستخدم
-  useEffect(() => {
-    loadUserData();
-  }, []);
-
-  const loadUserData = async () => {
+  // تحميل بيانات المستخدم مع useCallback
+  const loadUserData = useCallback(async () => {
     try {
       setLoading(true);
       
@@ -198,7 +194,12 @@ export default function DashboardPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [router]);
+
+  // تحميل بيانات المستخدم
+  useEffect(() => {
+    loadUserData();
+  }, [loadUserData]);
 
   const handleAddLink = async (linkData: {
     type: string;
@@ -217,9 +218,11 @@ export default function DashboardPage() {
         setLinks(updatedLinks);
         alert('تم إضافة الرابط بنجاح!');
       } else {
+        console.error('Error adding link:', result.error);
         alert(`خطأ: ${result.error}`);
       }
     } catch (error) {
+      console.error('Error adding link:', error);
       alert('خطأ في إضافة الرابط');
     }
   };
@@ -247,7 +250,14 @@ export default function DashboardPage() {
         .single();
 
       if (error) {
+        console.error('Error updating profile:', error);
         alert(`خطأ: ${error.message}`);
+        return;
+      }
+
+      if (!data) {
+        console.error('No data returned from update');
+        alert('خطأ في تحديث الملف الشخصي');
         return;
       }
 
@@ -255,6 +265,7 @@ export default function DashboardPage() {
       setUser({ ...user, ...profileData });
       alert('تم تحديث الملف الشخصي بنجاح!');
     } catch (error) {
+      console.error('Error updating profile:', error);
       alert('خطأ في تحديث الملف الشخصي');
     }
   };
@@ -278,11 +289,13 @@ export default function DashboardPage() {
 
         const result = await UserService.updateLinksOrder(linkUpdates);
         if (!result.success) {
+          console.error('Error updating links order:', result.error);
           // إعادة الترتيب السابق في حالة الخطأ
           setLinks(links);
           alert(`خطأ في تحديث الترتيب: ${result.error}`);
         }
       } catch (error) {
+        console.error('Error updating links order:', error);
         // إعادة الترتيب السابق في حالة الخطأ
         setLinks(links);
         alert('خطأ في تحديث ترتيب الروابط');
@@ -304,9 +317,11 @@ export default function DashboardPage() {
         }
         alert('تم حذف الرابط بنجاح!');
       } else {
+        console.error('Error deleting link:', result.error);
         alert(`خطأ: ${result.error}`);
       }
     } catch (error) {
+      console.error('Error deleting link:', error);
       alert('خطأ في حذف الرابط');
     }
   };
@@ -341,6 +356,7 @@ export default function DashboardPage() {
       await navigator.clipboard.writeText(profileUrl);
       alert('تم نسخ الرابط بنجاح!');
     } catch (error) {
+      console.error('Error copying link:', error);
       // Fallback للمتصفحات القديمة
       const textArea = document.createElement('textarea');
       textArea.value = profileUrl;
@@ -401,9 +417,11 @@ export default function DashboardPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-4">
             <div className="flex items-center">
-              <img 
+              <Image 
                 src="/logo.svg" 
                 alt="Board Iraq Logo" 
+                width={40}
+                height={40}
                 className="h-10 w-auto"
               />
             </div>
@@ -577,7 +595,13 @@ export default function DashboardPage() {
                 }}
               >
                 {qrCodeUrl ? (
-                  <img src={qrCodeUrl} alt="QR Code" className="w-full h-full object-contain" />
+                  <Image 
+                    src={qrCodeUrl} 
+                    alt="QR Code" 
+                    width={192}
+                    height={192}
+                    className="w-full h-full object-contain" 
+                  />
                 ) : (
                   <div className="text-center">
                     <QrCode className="h-12 w-12 mx-auto mb-2" style={{ color: '#D97757' }} />
