@@ -1,8 +1,9 @@
 // src/app/admin/page.tsx - Enhanced Admin Dashboard (Updated with New Brand Identity)
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { 
@@ -29,7 +30,6 @@ import {
   Clock,
   Star,
   UserCheck,
-  Settings,
   FileText,
   Target,
   User,
@@ -86,6 +86,25 @@ interface DashboardFilters {
   period: 'all' | 'today' | 'week' | 'month';
 }
 
+interface UserLink {
+  id: string;
+  user_id: string;
+  title: string;
+  url: string;
+  type: string;
+  platform?: string;
+  click_count: number;
+  is_active: boolean;
+  sort_order: number;
+}
+
+interface UserVisit {
+  id: string;
+  user_id: string;
+  visitor_ip?: string;
+  visited_at: string;
+}
+
 export default function EnhancedAdminPage() {
   const router = useRouter();
   
@@ -127,19 +146,11 @@ export default function EnhancedAdminPage() {
     success: boolean;
     users: BatchUser[];
     error?: string;
+    successCount?: number;
   } | null>(null);
 
-  // تأثيرات جانبية
-  useEffect(() => {
-    checkAdminPermissions();
-  }, []);
-
-  useEffect(() => {
-    filterUsers();
-  }, [users, filters]);
-
   // فحص صلاحيات الأدمن
-  const checkAdminPermissions = async () => {
+  const checkAdminPermissions = useCallback(async () => {
     try {
       setIsLoadingPermissions(true);
       
@@ -164,25 +175,10 @@ export default function EnhancedAdminPage() {
     } finally {
       setIsLoadingPermissions(false);
     }
-  };
-
-  // تحميل جميع البيانات
-  const loadAllData = async () => {
-    setLoading(true);
-    try {
-      await Promise.all([
-        loadUsers(),
-        loadStats()
-      ]);
-    } catch (error) {
-      console.error('خطأ في تحميل البيانات:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  }, [router]);
 
   // تحميل المستخدمين
-  const loadUsers = async () => {
+  const loadUsers = useCallback(async () => {
     try {
       const { data: usersData, error } = await supabase
         .from('users')
@@ -236,19 +232,16 @@ export default function EnhancedAdminPage() {
     } catch (error) {
       console.error('خطأ في جلب المستخدمين:', error);
     }
-  };
+  }, []);
 
-    // تحميل الإحصائيات
-    async function loadStats(): Promise<void> {
+  // تحميل الإحصائيات
+  const loadStats = useCallback(async (): Promise<void> => {
     try {
-      const { data: batchUsersData } = await supabase
+      const { count: batchUsersCount } = await supabase
         .from('users')
         .select('*', { count: 'exact', head: true })
         .eq('is_batch_generated', true);
 
-      const batchStats = {
-        batchUsers: (batchUsersData as any)?.count || 0
-      };
       const { data: allUsers } = await supabase
         .from('users')
         .select('total_visits, total_clicks');
@@ -284,7 +277,7 @@ export default function EnhancedAdminPage() {
         totalClicks: adminStats.totalClicks,
         activeUsers: users.filter(u => u.last_visit_at &&
           new Date(u.last_visit_at) > new Date(Date.now() - 30 * 24 * 60 * 60 * 1000)).length,
-        batchUsers: batchStats.batchUsers,
+        batchUsers: batchUsersCount || 0,
         premiumUsers: premiumUsersResult.count || 0,
         recentSignups: recentSignupsResult.count || 0,
         avgLinksPerUser: totalUsers > 0 ? Math.round((totalLinks / totalUsers) * 10) / 10 : 0,
@@ -293,10 +286,25 @@ export default function EnhancedAdminPage() {
     } catch (error) {
       console.error('خطأ في تحميل الإحصائيات:', error);
     }
-  }
+  }, [users]);
+
+  // تحميل جميع البيانات
+  const loadAllData = useCallback(async () => {
+    setLoading(true);
+    try {
+      await Promise.all([
+        loadUsers(),
+        loadStats()
+      ]);
+    } catch (error) {
+      console.error('خطأ في تحميل البيانات:', error);
+    } finally {
+      setLoading(false);
+    }
+  }, [loadUsers, loadStats]);
 
   // تصفية المستخدمين
-  const filterUsers = () => {
+  const filterUsers = useCallback(() => {
     let filtered = [...users];
 
     if (filters.search) {
@@ -360,7 +368,7 @@ export default function EnhancedAdminPage() {
     }
 
     setFilteredUsers(filtered);
-  };
+  }, [users, filters]);
 
   // إنشاء حسابات بالجملة
   const handleCreateBatch = async () => {
@@ -466,6 +474,15 @@ export default function EnhancedAdminPage() {
     a.click();
   };
 
+  // تأثيرات جانبية
+  useEffect(() => {
+    checkAdminPermissions();
+  }, [checkAdminPermissions]);
+
+  useEffect(() => {
+    filterUsers();
+  }, [filterUsers]);
+
   // شاشة تحميل فحص الصلاحيات
   if (isLoadingPermissions) {
     return (
@@ -492,7 +509,7 @@ export default function EnhancedAdminPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-4">
             <div className="flex items-center gap-3">
-              <img src="/logo.svg" alt="Board Iraq" className="w-18 h-8" />
+              <Image src="/logo.svg" alt="Board Iraq" width={72} height={32} className="w-18 h-8" />
             </div>
             <div className="flex items-center gap-4">
               <Button 
@@ -617,7 +634,7 @@ export default function EnhancedAdminPage() {
                 <label className="block text-sm font-medium mb-2" style={{ color: '#141413' }}>نوع المستخدم</label>
                 <select
                   value={filters.userType}
-                  onChange={(e) => setFilters(prev => ({ ...prev, userType: e.target.value as any }))}
+                  onChange={(e) => setFilters(prev => ({ ...prev, userType: e.target.value as DashboardFilters['userType'] }))}
                   className="w-full px-3 py-2 border-0 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-400"
                   style={{ backgroundColor: 'rgba(217, 151, 87, 0.05)', color: '#141413' }}
                 >
@@ -632,7 +649,7 @@ export default function EnhancedAdminPage() {
                 <label className="block text-sm font-medium mb-2" style={{ color: '#141413' }}>النشاط</label>
                 <select
                   value={filters.activity}
-                  onChange={(e) => setFilters(prev => ({ ...prev, activity: e.target.value as any }))}
+                  onChange={(e) => setFilters(prev => ({ ...prev, activity: e.target.value as DashboardFilters['activity'] }))}
                   className="w-full px-3 py-2 border-0 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-400"
                   style={{ backgroundColor: 'rgba(217, 151, 87, 0.05)', color: '#141413' }}
                 >
@@ -646,7 +663,7 @@ export default function EnhancedAdminPage() {
                 <label className="block text-sm font-medium mb-2" style={{ color: '#141413' }}>فترة التسجيل</label>
                 <select
                   value={filters.period}
-                  onChange={(e) => setFilters(prev => ({ ...prev, period: e.target.value as any }))}
+                  onChange={(e) => setFilters(prev => ({ ...prev, period: e.target.value as DashboardFilters['period'] }))}
                   className="w-full px-3 py-2 border-0 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-400"
                   style={{ backgroundColor: 'rgba(217, 151, 87, 0.05)', color: '#141413' }}
                 >
@@ -711,8 +728,8 @@ export default function EnhancedAdminPage() {
                   </tr>
                 </thead>
                 <tbody>
-                  {filteredUsers.map((user, index) => (
-                    <tr key={user.id} className={`border-b hover:bg-orange-25 ${index % 2 === 0 ? 'bg-white' : 'bg-orange-25'}`} style={{ borderBottomColor: 'rgba(217, 151, 87, 0.1)' }}>
+                  {filteredUsers.map((user) => (
+                    <tr key={user.id} className="border-b hover:bg-orange-25 odd:bg-white even:bg-orange-25" style={{ borderBottomColor: 'rgba(217, 151, 87, 0.1)' }}>
                       <td className="py-4 px-4">
                         <div className="flex items-center">
                           <div className="w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-sm" style={{ background: 'linear-gradient(135deg, #D97757, #C76646)' }}>
@@ -1014,11 +1031,13 @@ export default function EnhancedAdminPage() {
                         <div className="mt-4 p-3 rounded-lg" style={{ backgroundColor: 'rgba(217, 151, 87, 0.1)' }}>
                           <h5 className="text-sm font-medium mb-2" style={{ color: '#141413' }}>معاينة QR Codes:</h5>
                           <div className="flex gap-2 overflow-x-auto">
-                            {batchResult.users.slice(0, 4).map((user, index) => (
-                              <div key={index} className="flex-shrink-0 text-center">
-                                <img 
+                            {batchResult.users.slice(0, 4).map((user) => (
+                              <div key={user.username} className="flex-shrink-0 text-center">
+                                <Image 
                                   src={user.qr_code} 
                                   alt={`QR Code for ${user.username}`}
+                                  width={64}
+                                  height={64}
                                   className="w-16 h-16 border rounded"
                                   style={{ borderColor: 'rgba(217, 151, 87, 0.3)' }}
                                 />
@@ -1094,15 +1113,11 @@ interface UserDetailsModalProps {
 }
 
 function UserDetailsModal({ user, onClose, onRefresh }: UserDetailsModalProps) {
-  const [userLinks, setUserLinks] = useState<any[]>([]);
-  const [userVisits, setUserVisits] = useState<any[]>([]);
+  const [userLinks, setUserLinks] = useState<UserLink[]>([]);
+  const [userVisits, setUserVisits] = useState<UserVisit[]>([]);
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    loadUserDetails();
-  }, [user.id]);
-
-  const loadUserDetails = async () => {
+  const loadUserDetails = useCallback(async () => {
     setLoading(true);
     try {
       const { data: links } = await supabase
@@ -1125,7 +1140,11 @@ function UserDetailsModal({ user, onClose, onRefresh }: UserDetailsModalProps) {
     } finally {
       setLoading(false);
     }
-  };
+  }, [user.id]);
+
+  useEffect(() => {
+    loadUserDetails();
+  }, [loadUserDetails]);
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4" dir="rtl">
@@ -1186,7 +1205,7 @@ function UserDetailsModal({ user, onClose, onRefresh }: UserDetailsModalProps) {
                 )}
                 {user.job_title && (
                   <div className="flex items-center">
-                    <Settings className="h-4 w-4 ml-2" style={{ color: '#D97757' }} />
+                    <FileText className="h-4 w-4 ml-2" style={{ color: '#D97757' }} />
                     <span className="text-sm" style={{ color: '#141413' }}>
                       <strong>المسمى الوظيفي:</strong> {user.job_title}
                     </span>
@@ -1194,7 +1213,7 @@ function UserDetailsModal({ user, onClose, onRefresh }: UserDetailsModalProps) {
                 )}
                 {user.company && (
                   <div className="flex items-center">
-                    <Settings className="h-4 w-4 ml-2" style={{ color: '#D97757' }} />
+                    <FileText className="h-4 w-4 ml-2" style={{ color: '#D97757' }} />
                     <span className="text-sm" style={{ color: '#141413' }}>
                       <strong>الشركة:</strong> {user.company}
                     </span>
@@ -1276,7 +1295,7 @@ function UserDetailsModal({ user, onClose, onRefresh }: UserDetailsModalProps) {
             <CardContent>
               {userLinks.length > 0 ? (
                 <div className="space-y-3">
-                  {userLinks.map((link, index) => (
+                  {userLinks.map((link) => (
                     <div key={link.id} className="flex items-center justify-between p-3 rounded-lg" style={{ backgroundColor: 'rgba(217, 151, 87, 0.05)' }}>
                       <div className="flex items-center">
                         <div className="w-8 h-8 rounded-full flex items-center justify-center text-white text-xs" style={{ backgroundColor: '#D97757' }}>
@@ -1322,7 +1341,7 @@ function UserDetailsModal({ user, onClose, onRefresh }: UserDetailsModalProps) {
             <CardContent>
               {userVisits.length > 0 ? (
                 <div className="space-y-2">
-                  {userVisits.map((visit, index) => (
+                  {userVisits.map((visit) => (
                     <div key={visit.id} className="flex items-center justify-between text-sm py-2 border-b last:border-b-0" style={{ borderBottomColor: 'rgba(217, 151, 87, 0.1)' }}>
                       <div className="flex items-center">
                         <Globe className="h-4 w-4 ml-2" style={{ color: '#D97757' }} />
@@ -1356,7 +1375,7 @@ function UserDetailsModal({ user, onClose, onRefresh }: UserDetailsModalProps) {
                 style={{ borderColor: '#D97757', color: '#D97757' }}
                 className="hover:bg-orange-50 border-0 focus:ring-orange-400"
               >
-                <Settings className="h-4 w-4 ml-2" />
+                <User className="h-4 w-4 ml-2" />
                 لوحة التحكم
               </Button>
             </div>

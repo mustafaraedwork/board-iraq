@@ -1,20 +1,17 @@
 // src/app/page.tsx
 import React from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { Card, CardContent } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { 
   CreditCard, 
   Smartphone, 
-  Users, 
   BarChart3, 
-  QrCode, 
   Share2,
   Eye,
   Star,
   ArrowRight,
-  CheckCircle,
   Globe,
   Phone,
   Mail
@@ -82,9 +79,11 @@ export default function HomePage() {
           <div className="flex justify-between items-center py-4">
             {/* Logo الجديد */}
             <div className="flex items-center">
-              <img 
+              <Image 
                 src="/logo.svg" 
                 alt="Board Iraq Logo" 
+                width={40}
+                height={40}
                 className="h-10 w-auto"
               />
             </div>
@@ -126,9 +125,11 @@ export default function HomePage() {
             
             {/* Logo كبير في Hero Section */}
             <div className="mb-8 flex justify-center">
-              <img 
+              <Image 
                 src="/logo.svg" 
                 alt="Board Iraq" 
+                width={112}
+                height={112}
                 className="h-20 md:h-28 w-auto opacity-90"
               />
             </div>
@@ -335,9 +336,11 @@ export default function HomePage() {
             <div className="md:col-span-2">
               {/* Logo في Footer */}
               <div className="mb-4">
-                <img 
+                <Image 
                   src="/logo.svg" 
                   alt="Board Iraq" 
+                  width={40}
+                  height={40}
                   className="h-10 w-auto"
                 />
               </div>
