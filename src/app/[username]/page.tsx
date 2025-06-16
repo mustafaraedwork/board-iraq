@@ -1,4 +1,4 @@
-// src/app/[username]/page.tsx
+// src/app/[username]/page.tsx - محدث مع تتبع Facebook
 import { notFound } from 'next/navigation';
 import { UserService } from '@/lib/supabase/server';
 import PublicProfile from '@/components/profile/PublicProfile';
@@ -46,10 +46,15 @@ export default async function UserPage({ params }: UserPageProps) {
     notFound();
   }
 
-  return <PublicProfile user={user} links={links} />;
+  return (
+    <PublicProfile 
+      user={user} 
+      links={links}
+    />
+  );
 }
 
-// تحسين SEO - عنوان الصفحة وصفتها
+// تحسين SEO - عنوان الصفحة وصفتها محدث
 export async function generateMetadata({ params }: UserPageProps) {
   const { username } = params;
   const { user } = await getUserData(username);
@@ -61,13 +66,35 @@ export async function generateMetadata({ params }: UserPageProps) {
     };
   }
 
+  // تحسين SEO للبطاقة الذكية
+  const title = `${user.full_name || user.username} - بطاقة ذكية | Board Iraq`;
+  const description = user.bio || 
+    `تواصل مع ${user.full_name || user.username}${user.job_title ? ` - ${user.job_title}` : ''}${user.company ? ` في ${user.company}` : ''} عبر البطاقة الذكية على Board Iraq`;
+
   return {
-    title: `${user.full_name || user.username} - Board Iraq`,
-    description: user.bio || `صفحة ${user.full_name || user.username} الشخصية على Board Iraq`,
+    title,
+    description,
+    keywords: `بطاقة ذكية, ${user.full_name}, ${user.username}, ${user.company || ''}, ${user.job_title || ''}, العراق, NFC`,
     openGraph: {
-      title: user.full_name || user.username,
-      description: user.bio || `تواصل مع ${user.full_name || user.username}`,
-      images: user.profile_image_url ? [user.profile_image_url] : [],
+      title,
+      description,
+      images: user.profile_image_url ? [user.profile_image_url] : ['/og-image.jpg'],
+      url: `https://boardiraq.vercel.app/${username}`,
+      type: 'profile',
+      locale: 'ar_IQ',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      images: user.profile_image_url ? [user.profile_image_url] : ['/og-image.jpg'],
+    },
+    robots: {
+      index: true,
+      follow: true,
+    },
+    alternates: {
+      canonical: `https://boardiraq.vercel.app/${username}`,
     },
   };
 }

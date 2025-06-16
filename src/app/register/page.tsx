@@ -1,7 +1,7 @@
-// src/app/register/page.tsx - محدث بالهوية البصرية الجديدة مع الاحتفاظ على جميع الوظائف
+// src/app/register/page.tsx - محدث مع تتبع Facebook
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -9,6 +9,13 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { User, Lock, Loader2, AlertCircle, CheckCircle } from 'lucide-react';
 import { supabase } from '@/lib/supabase/client';
+
+// استيراد Facebook Hooks
+import { 
+  useFacebookCompleteRegistration, 
+  useFacebookViewContent,
+  useFacebookEngagementTracking
+} from '@/lib/facebook-hooks';
 
 export default function RegisterPage() {
   const [formData, setFormData] = useState({
@@ -21,6 +28,24 @@ export default function RegisterPage() {
   const [success, setSuccess] = useState(false);
   
   const router = useRouter();
+
+  // تفعيل Facebook Hooks
+  const trackViewContent = useFacebookViewContent();
+  const trackCompleteRegistration = useFacebookCompleteRegistration();
+  
+  // تتبع التفاعل التلقائي (وقت التصفح والتمرر)
+  useFacebookEngagementTracking();
+
+  // تتبع ViewContent عند دخول صفحة التسجيل
+  useEffect(() => {
+    trackViewContent({
+      content_type: 'page',
+      content_ids: ['registration_page'],
+      content_name: 'صفحة إنشاء حساب جديد - Board Iraq',
+      value: 11.36, // 15,000 دينار = 11.36 USD
+      currency: 'USD'
+    });
+  }, [trackViewContent]);
 
   const handleChange = (field: string, value: string) => {
     setFormData(prev => ({
@@ -128,6 +153,15 @@ export default function RegisterPage() {
         setLoading(false);
         return;
       }
+
+      // 🎉 تتبع CompleteRegistration في Facebook
+      await trackCompleteRegistration({
+        registration_method: 'website',
+        user_email: '', // يمكن إضافة إيميل لاحقاً
+        user_phone: '', // يمكن إضافة هاتف لاحقاً
+        user_name: formData.username,
+        username: formData.username
+      });
 
       // عرض رسالة النجاح
       setSuccess(true);

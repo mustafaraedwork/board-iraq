@@ -1,5 +1,7 @@
-// src/app/page.tsx
-import React from 'react';
+// src/app/page.tsx - محدث مع تتبع Facebook
+'use client';
+
+import React, { useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Card, CardContent } from '@/components/ui/card';
@@ -17,7 +19,71 @@ import {
   Mail
 } from 'lucide-react';
 
+// استيراد Facebook Hooks
+import { 
+  useFacebookViewContent, 
+  useFacebookContact, 
+  useFacebookInitiateCheckout,
+  useFacebookAddToWishlist,
+  useFacebookEngagementTracking
+} from '@/lib/facebook-hooks';
+
 export default function HomePage() {
+  // تفعيل Facebook Hooks
+  const trackViewContent = useFacebookViewContent();
+  const trackContact = useFacebookContact();
+  const trackInitiateCheckout = useFacebookInitiateCheckout();
+  const trackAddToWishlist = useFacebookAddToWishlist();
+  
+  // تتبع التفاعل التلقائي (وقت التصفح والتمرر)
+  useFacebookEngagementTracking();
+
+  // تتبع ViewContent عند زيارة الصفحة الرئيسية
+  useEffect(() => {
+    trackViewContent({
+      content_type: 'website',
+      content_ids: ['homepage'],
+      content_name: 'الصفحة الرئيسية - Board Iraq',
+      value: 11.36, // 15,000 دينار = 11.36 USD
+      currency: 'USD'
+    });
+  }, [trackViewContent]);
+
+  // دالة تتبع النقر على اطلب الآن
+  const handleOrderClick = () => {
+    trackInitiateCheckout({
+      value: 11.36, // 15,000 دينار = 11.36 USD
+      num_items: 1
+    });
+  };
+
+  // دالة تتبع الاهتمام بالمعاينة
+  const handlePreviewClick = () => {
+    trackAddToWishlist({
+      content_name: 'معاينة البطاقة الذكية',
+      value: 11.36,
+      engagement_score: 8
+    });
+  };
+
+  // دالة تتبع التواصل
+  const handleContactClick = (contactType: string) => {
+    trackContact({
+      contact_method: contactType,
+      content_name: `تواصل عبر ${contactType}`,
+      link_type: contactType
+    });
+  };
+
+  // دالة تتبع الاهتمام بالتسجيل
+  const handleRegisterInterest = () => {
+    trackAddToWishlist({
+      content_name: 'اهتمام بإنشاء حساب',
+      value: 11.36,
+      engagement_score: 7
+    });
+  };
+
   const features = [
     {
       icon: <CreditCard className="h-8 w-8" style={{ color: '#D97757' }} />,
@@ -50,7 +116,7 @@ export default function HomePage() {
     { number: "2+", label: "سنوات خبرة" },
     { number: "4000+", label: "عميل راضٍ" },
     { number: "24/7", label: "دعم فني" },
-    { number: "15,000", label: "دينار فقط" }
+    { number: "15,000", label: "دينار فقط" } // 🆕 السعر المحدث
   ];
 
   const howItWorks = [
@@ -96,6 +162,7 @@ export default function HomePage() {
                   borderColor: '#D97757', 
                   color: '#D97757',
                 }}
+                onClick={() => handleContactClick('login')}
               >
                 تسجيل الدخول
               </Link>
@@ -103,6 +170,7 @@ export default function HomePage() {
                 href="/register"
                 className="px-6 py-2 rounded-lg transition-colors text-white"
                 style={{ backgroundColor: '#D97757' }}
+                onClick={handleRegisterInterest}
               >
                 إنشاء حساب
               </Link>
@@ -151,6 +219,7 @@ export default function HomePage() {
                 href="/order"
                 className="px-8 py-4 rounded-xl text-lg font-semibold transition-all transform hover:scale-105 text-white shadow-lg"
                 style={{ backgroundColor: '#D97757' }}
+                onClick={handleOrderClick}
               >
                 اطلب بطاقتك الآن
                 <ArrowRight className="h-5 w-5 mr-2 inline" />
@@ -164,6 +233,7 @@ export default function HomePage() {
                   color: '#D97757',
                   backgroundColor: 'transparent'
                 }}
+                onClick={handlePreviewClick}
               >
                 <Eye className="h-5 w-5 ml-2 inline" />
                 شاهد المعاينة
@@ -201,7 +271,15 @@ export default function HomePage() {
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
             {features.map((feature, index) => (
-              <Card key={index} className="text-center p-6 border-0 shadow-lg transition-all hover:shadow-xl hover:scale-105" style={{ backgroundColor: 'white' }}>
+              <Card 
+                key={index} 
+                className="text-center p-6 border-0 shadow-lg transition-all hover:shadow-xl hover:scale-105 cursor-pointer" 
+                style={{ backgroundColor: 'white' }}
+                onClick={() => trackAddToWishlist({
+                  content_name: `اهتمام بـ ${feature.title}`,
+                  engagement_score: 6
+                })}
+              >
                 <CardContent className="p-0">
                   <div className="mb-4 flex justify-center">
                     {feature.icon}
@@ -269,12 +347,16 @@ export default function HomePage() {
               <Badge 
                 key={index} 
                 variant="outline" 
-                className="text-lg px-4 py-2 border-2 transition-all hover:scale-105"
+                className="text-lg px-4 py-2 border-2 transition-all hover:scale-105 cursor-pointer"
                 style={{ 
                   borderColor: '#D97757', 
                   color: '#D97757',
                   backgroundColor: 'transparent'
                 }}
+                onClick={() => trackAddToWishlist({
+                  content_name: `اهتمام بربط ${platform}`,
+                  engagement_score: 5
+                })}
               >
                 {platform}
               </Badge>
@@ -289,6 +371,7 @@ export default function HomePage() {
               href="/register"
               className="inline-flex items-center px-6 py-3 rounded-lg font-semibold transition-all transform hover:scale-105 text-white"
               style={{ backgroundColor: '#D97757' }}
+              onClick={handleRegisterInterest}
             >
               ابدأ الآن مجاناً
               <ArrowRight className="h-5 w-5 mr-2" />
@@ -312,6 +395,7 @@ export default function HomePage() {
                 href="/order"
                 className="px-8 py-4 rounded-xl text-lg font-semibold transition-all transform hover:scale-105 border-2 border-white text-white hover:text-white"
                 style={{ backgroundColor: 'transparent' }}
+                onClick={handleOrderClick}
               >
                 اطلب بطاقتك
               </Link>
@@ -321,6 +405,7 @@ export default function HomePage() {
                 style={{ 
                   backgroundColor: '#141413',
                 }}
+                onClick={handleRegisterInterest}
               >
                 إنشاء حساب مجاني
               </Link>
@@ -349,25 +434,55 @@ export default function HomePage() {
                 نساعدك على ترك انطباع مميز واحترافي.
               </p>
               <div className="flex gap-6">
-                <a href="#" className="transition-colors" style={{ color: '#D97757' }}>
+                <button 
+                  onClick={() => handleContactClick('website')}
+                  className="transition-colors" 
+                  style={{ color: '#D97757' }}
+                >
                   <Globe className="h-5 w-5" />
-                </a>
-                <a href="#" className="transition-colors" style={{ color: '#D97757' }}>
+                </button>
+                <button 
+                  onClick={() => handleContactClick('phone')}
+                  className="transition-colors" 
+                  style={{ color: '#D97757' }}
+                >
                   <Phone className="h-5 w-5" />
-                </a>
-                <a href="#" className="transition-colors" style={{ color: '#D97757' }}>
+                </button>
+                <button 
+                  onClick={() => handleContactClick('email')}
+                  className="transition-colors" 
+                  style={{ color: '#D97757' }}
+                >
                   <Mail className="h-5 w-5" />
-                </a>
+                </button>
               </div>
             </div>
             
             <div>
               <h4 className="font-semibold mb-4" style={{ color: '#141413' }}>روابط سريعة</h4>
               <ul className="space-y-2">
-                <li><Link href="/order" className="transition-colors" style={{ color: '#141413', opacity: 0.7 }}>طلب بطاقة</Link></li>
+                <li>
+                  <Link 
+                    href="/order" 
+                    className="transition-colors" 
+                    style={{ color: '#141413', opacity: 0.7 }}
+                    onClick={handleOrderClick}
+                  >
+                    طلب بطاقة
+                  </Link>
+                </li>
                 <li><Link href="/pricing" className="transition-colors" style={{ color: '#141413', opacity: 0.7 }}>الأسعار</Link></li>
                 <li><Link href="/about" className="transition-colors" style={{ color: '#141413', opacity: 0.7 }}>من نحن</Link></li>
-                <li><Link href="/contact" className="transition-colors" style={{ color: '#141413', opacity: 0.7 }}>تواصل معنا</Link></li>
+                <li>
+                  <Link 
+                    href="/contact" 
+                    className="transition-colors" 
+                    style={{ color: '#141413', opacity: 0.7 }}
+                    onClick={() => handleContactClick('contact_page')}
+                  >
+                    تواصل معنا
+                  </Link>
+                </li>
               </ul>
             </div>
             

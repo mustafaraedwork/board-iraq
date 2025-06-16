@@ -1,8 +1,16 @@
-// src/app/order/page.tsx - محدث بالهوية البصرية الجديدة مع الاحتفاظ على جميع الوظائف
+// src/app/order/page.tsx - محدث مع تتبع Facebook
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { CreditCard, User, Phone, MapPin, Package, MessageSquare, CheckCircle, AlertCircle } from 'lucide-react';
+
+// استيراد Facebook Hooks
+import { 
+  useFacebookInitiateCheckout, 
+  useFacebookPurchase,
+  useFacebookViewContent,
+  useFacebookEngagementTracking
+} from '@/lib/facebook-hooks';
 
 interface OrderResponse {
   success: boolean;
@@ -29,6 +37,32 @@ export default function OrderPage() {
   const [orderResult, setOrderResult] = useState<OrderResponse | null>(null);
   const [error, setError] = useState<string>('');
 
+  // تفعيل Facebook Hooks
+  const trackViewContent = useFacebookViewContent();
+  const trackInitiateCheckout = useFacebookInitiateCheckout();
+  const trackPurchase = useFacebookPurchase();
+  
+  // تتبع التفاعل التلقائي (وقت التصفح والتمرر)
+  useFacebookEngagementTracking();
+
+  // تتبع ViewContent + InitiateCheckout عند دخول صفحة الطلب
+  useEffect(() => {
+    // تتبع مشاهدة صفحة الطلب
+    trackViewContent({
+      content_type: 'product',
+      content_ids: ['smart_card'],
+      content_name: 'صفحة طلب البطاقة الذكية',
+      value: 11.36, // 15,000 دينار = 11.36 USD
+      currency: 'USD'
+    });
+
+    // تتبع بدء عملية الطلب
+    trackInitiateCheckout({
+      value: 11.36,
+      num_items: 1
+    });
+  }, [trackViewContent, trackInitiateCheckout]);
+
   const governorates = [
     'بغداد', 'البصرة', 'نينوى', 'أربيل', 'النجف', 'كربلاء', 
     'الأنبار', 'السليمانية', 'واسط', 'كركوك', 'ذي قار', 
@@ -46,6 +80,16 @@ export default function OrderPage() {
     // مسح الخطأ عند التعديل
     if (error) setError('');
   };
+
+  // تتبع تغيير الكمية لتحديث InitiateCheckout
+  useEffect(() => {
+    if (formData.quantity > 1) {
+      trackInitiateCheckout({
+        value: formData.quantity * 11.36, // 15,000 دينار = 11.36 USD
+        num_items: formData.quantity
+      });
+    }
+  }, [formData.quantity, trackInitiateCheckout]);
 
   const validateForm = (): boolean => {
     if (!formData.fullName.trim()) {
@@ -108,6 +152,18 @@ export default function OrderPage() {
       const result: OrderResponse = await response.json();
 
       if (response.ok && result.success) {
+        // 🎉 تتبع Purchase عند نجاح الطلب
+        const totalValue = formData.quantity * 15000; // بالدينار العراقي
+        
+        await trackPurchase({
+          value: totalValue, // سيتم تحويله تلقائياً إلى USD
+          order_id: result.orderNumber || result.orderId,
+          num_items: formData.quantity,
+          user_email: '', // يمكن إضافة إيميل لاحقاً
+          user_phone: formData.phone,
+          user_name: formData.fullName
+        });
+
         setOrderResult(result);
         setOrderSubmitted(true);
       } else {
@@ -189,6 +245,12 @@ export default function OrderPage() {
                   nearestLandmark: '',
                   quantity: 1,
                   notes: ''
+                });
+                
+                // تتبع طلب جديد
+                trackInitiateCheckout({
+                  value: 11.36,
+                  num_items: 1
                 });
               }}
               className="w-full text-white py-3 rounded-xl font-medium hover:opacity-90 transition-all duration-200"
@@ -320,7 +382,7 @@ export default function OrderPage() {
                   </div>
                 </div>
                 
-                {/* السعر */}
+                {/* السعر - محدث بالسعر الجديد */}
                 <div 
                   className="mt-6 rounded-xl p-4 text-center"
                   style={{ backgroundColor: 'rgba(217, 151, 87, 0.1)' }}
@@ -508,7 +570,7 @@ export default function OrderPage() {
                   </p>
                 </div>
 
-                {/* المجموع */}
+                {/* المجموع - محدث بالسعر الجديد */}
                 <div 
                   className="rounded-xl p-4"
                   style={{ backgroundColor: 'rgba(217, 151, 87, 0.1)' }}

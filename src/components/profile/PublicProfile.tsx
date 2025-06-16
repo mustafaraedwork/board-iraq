@@ -1,4 +1,4 @@
-// src/components/profile/PublicProfile.tsx
+// src/components/profile/PublicProfile.tsx - محدث مع تتبع Facebook
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -28,6 +28,14 @@ import {
   FaYoutube,
   FaFilePdf
 } from 'react-icons/fa';
+
+// استيراد Facebook Hooks
+import { 
+  useFacebookViewContent, 
+  useFacebookContact, 
+  useFacebookAddToWishlist,
+  useFacebookEngagementTracking
+} from '@/lib/facebook-hooks';
 
 interface PublicProfileProps {
   user: User;
@@ -116,8 +124,28 @@ export default function PublicProfile({ user, links }: PublicProfileProps) {
   const [isClient, setIsClient] = useState(false);
   const [visitCount, setVisitCount] = useState(user.total_visits || 0);
 
+  // تفعيل Facebook Hooks
+  const trackViewContent = useFacebookViewContent();
+  const trackContact = useFacebookContact();
+  const trackAddToWishlist = useFacebookAddToWishlist();
+  
+  // تتبع التفاعل التلقائي (وقت التصفح والتمرر)
+  useFacebookEngagementTracking();
+
   // تحديد لون النص تلقائياً
   const autoTextColor = getAutoTextColor(user.background_color || '#F0EEE6');
+
+  // تتبع ViewContent عند زيارة البطاقة
+  useEffect(() => {
+    trackViewContent({
+      content_type: 'profile',
+      content_ids: [user.username],
+      content_name: `بطاقة ${user.full_name || user.username}`,
+      value: 11.36, // 15,000 دينار = 11.36 USD
+      currency: 'USD',
+      user_name: user.full_name || user.username
+    });
+  }, [trackViewContent, user.username, user.full_name]);
 
   useEffect(() => {
     setIsClient(true);
@@ -146,8 +174,16 @@ export default function PublicProfile({ user, links }: PublicProfileProps) {
     updateVisitCount();
   }, [user.username]);
 
-  // دالة تنزيل vCard
+  // دالة تنزيل vCard مع تتبع Facebook
   const downloadVCard = () => {
+    // تتبع الاهتمام بحفظ جهة الاتصال
+    trackAddToWishlist({
+      content_name: `حفظ جهة اتصال ${user.full_name || user.username}`,
+      value: 11.36,
+      user_name: user.full_name || user.username,
+      engagement_score: 8
+    });
+
     const vcard = `BEGIN:VCARD
 VERSION:3.0
 FN:${user.full_name || user.username}
@@ -168,8 +204,16 @@ END:VCARD`;
     window.URL.revokeObjectURL(url);
   };
 
-  // دالة المشاركة
+  // دالة المشاركة مع تتبع Facebook
   const shareProfile = async () => {
+    // تتبع مشاركة البطاقة
+    trackContact({
+      contact_method: 'share',
+      content_name: `مشاركة بطاقة ${user.full_name || user.username}`,
+      user_name: user.full_name || user.username,
+      link_type: 'share'
+    });
+
     const url = window.location.href;
     
     if (navigator.share) {
@@ -188,9 +232,30 @@ END:VCARD`;
     }
   };
 
+  // دالة تتبع النقر على الروابط مع Facebook
   const handleLinkClick = async (link: UserLink) => {
     console.log(`نقرة على: ${link.title}`);
-    // يمكن إضافة تتبع النقرات هنا لاحقاً
+    
+    // تتبع Contact في Facebook
+    trackContact({
+      contact_method: link.platform || link.type,
+      content_name: `${link.title} - ${user.full_name || user.username}`,
+      user_name: user.full_name || user.username,
+      link_type: link.platform || link.type
+    });
+
+    // إضافة تأخير صغير لضمان إرسال الحدث
+    await new Promise(resolve => setTimeout(resolve, 100));
+  };
+
+  // تتبع النقر على رابط الطلب
+  const handleOrderClick = () => {
+    trackAddToWishlist({
+      content_name: `اهتمام بطلب بطاقة من ${user.full_name || user.username}`,
+      value: 11.36,
+      user_name: user.full_name || user.username,
+      engagement_score: 9
+    });
   };
 
   return (
@@ -214,6 +279,10 @@ END:VCARD`;
             <button 
               className="transition-colors"
               style={{ color: autoTextColor, opacity: 0.8 }}
+              onClick={() => trackAddToWishlist({
+                content_name: `تفاعل مع قائمة ${user.full_name || user.username}`,
+                engagement_score: 5
+              })}
             >
               <MoreHorizontal className="h-6 w-6" />
             </button>
@@ -292,6 +361,7 @@ END:VCARD`;
                 rel="noopener noreferrer"
                 className="transition-colors opacity-80 hover:opacity-100"
                 style={{ color: autoTextColor }}
+                onClick={() => handleLinkClick(link)}
               >
                 {getPlatformIcon(link.platform || '', link.type)}
               </a>
@@ -353,6 +423,7 @@ END:VCARD`;
           target="_blank"
           rel="noopener noreferrer"
           className="block"
+          onClick={handleOrderClick}
         >
           <div 
             className="flex items-center justify-center px-6 py-4 rounded-2xl transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]"
