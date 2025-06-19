@@ -1,4 +1,4 @@
-// src/components/profile/PublicProfile.tsx - محدث مع تتبع Facebook
+// src/components/profile/PublicProfile.tsx - محدث مع إصلاح لون النص
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -66,19 +66,27 @@ const getPlatformIcon = (platform: string, type: string) => {
   }
 };
 
-// دالة لتحديد لون النص تلقائياً بناءً على لون الخلفية
-const getAutoTextColor = (backgroundColor: string): string => {
+// 🔥 إصلاح دالة تحديد لون النص - أعطي الأولوية لـ user.text_color
+const getTextColor = (user: User): string => {
+  // 🎯 إذا كان المستخدم حدد لون نص مخصص، استخدمه مباشرة
+  if (user.text_color && user.text_color !== '#000000' && user.text_color !== '#ffffff') {
+    return user.text_color;
+  }
+  
+  // إذا لم يحدد لون مخصص، احسب اللون تلقائياً
+  const backgroundColor = user.background_color || '#F0EEE6';
+  
   // إذا كان اللون أبيض أو فاتح جداً أو الكريمي الافتراضي
   if (backgroundColor === '#ffffff' || backgroundColor === '#fff' || 
       backgroundColor === 'white' || backgroundColor === '#f8f9fa' ||
       backgroundColor === '#F0EEE6' || backgroundColor === '#f0eee6' ||
       backgroundColor?.includes('255, 255, 255')) {
-    return '#141413'; // أسود داكن
+    return user.text_color || '#141413'; // استخدم لون المستخدم أو أسود داكن
   }
   
-  // للألوان المتدرجة، استخدم النص الأبيض دائماً
+  // للألوان المتدرجة، استخدم النص الأبيض دائماً أو لون المستخدم
   if (backgroundColor?.includes('gradient') || backgroundColor?.includes('linear-gradient')) {
-    return '#ffffff';
+    return user.text_color || '#ffffff';
   }
   
   // إذا كان اللون hex
@@ -92,13 +100,13 @@ const getAutoTextColor = (backgroundColor: string): string => {
       // حساب اللمعة (brightness)
       const brightness = ((r * 299) + (g * 587) + (b * 114)) / 1000;
       
-      // إذا كان اللون فاتح (لمعة > 128) استخدم نص أسود داكن، وإلا أبيض
-      return brightness > 128 ? '#141413' : '#ffffff';
+      // إذا كان اللون فاتح (لمعة > 128) استخدم لون المستخدم أو نص أسود داكن، وإلا أبيض أو لون المستخدم
+      return user.text_color || (brightness > 128 ? '#141413' : '#ffffff');
     }
   }
   
   // للألوان الداكنة الأخرى
-  return '#ffffff';
+  return user.text_color || '#ffffff';
 };
 
 // تنسيق الروابط
@@ -132,8 +140,8 @@ export default function PublicProfile({ user, links }: PublicProfileProps) {
   // تتبع التفاعل التلقائي (وقت التصفح والتمرر)
   useFacebookEngagementTracking();
 
-  // تحديد لون النص تلقائياً
-  const autoTextColor = getAutoTextColor(user.background_color || '#F0EEE6');
+  // 🔥 استخدام الدالة المحدثة لتحديد لون النص
+  const textColor = getTextColor(user);
 
   // تتبع ViewContent عند زيارة البطاقة
   useEffect(() => {
@@ -278,7 +286,7 @@ END:VCARD`;
           <div className="absolute top-6 left-6 z-10">
             <button 
               className="transition-colors"
-              style={{ color: autoTextColor, opacity: 0.8 }}
+              style={{ color: textColor, opacity: 0.8 }}
               onClick={() => trackAddToWishlist({
                 content_name: `تفاعل مع قائمة ${user.full_name || user.username}`,
                 engagement_score: 5
@@ -296,14 +304,14 @@ END:VCARD`;
                   src={user.profile_image_url}
                   alt={user.full_name || user.username}
                   className="w-32 h-32 rounded-full object-cover border-4"
-                  style={{ borderColor: `${autoTextColor}33` }}
+                  style={{ borderColor: `${textColor}33` }}
                 />
               ) : (
                 <div 
                   className="w-32 h-32 rounded-full flex items-center justify-center text-4xl font-bold border-4"
                   style={{
                     background: 'linear-gradient(135deg, #a8e6cf 0%, #88c999 50%, #4caf50 100%)',
-                    borderColor: `${autoTextColor}33`,
+                    borderColor: `${textColor}33`,
                     color: '#ffffff'
                   }}
                 >
@@ -312,39 +320,39 @@ END:VCARD`;
               )}
             </div>
 
-            {/* اسم المستخدم */}
+            {/* اسم المستخدم - 🔥 تطبيق لون النص المخصص */}
             <h1 
               className="text-2xl font-semibold mt-6 mb-2"
-              style={{ color: autoTextColor }}
+              style={{ color: textColor }}
             >
               {user.username}
             </h1>
 
-            {/* المسمى الوظيفي */}
+            {/* المسمى الوظيفي - 🔥 تطبيق لون النص المخصص */}
             {user.job_title && (
               <p 
                 className="text-lg opacity-90 mb-1"
-                style={{ color: autoTextColor }}
+                style={{ color: textColor }}
               >
                 {user.job_title}
               </p>
             )}
 
-            {/* اسم الشركة */}
+            {/* اسم الشركة - 🔥 تطبيق لون النص المخصص */}
             {user.company && (
               <p 
                 className="text-base font-medium opacity-80 mb-4"
-                style={{ color: autoTextColor }}
+                style={{ color: textColor }}
               >
                 {user.company}
               </p>
             )}
 
-            {/* الوصف */}
+            {/* الوصف - 🔥 تطبيق لون النص المخصص */}
             {user.bio && (
               <p 
                 className="text-center max-w-sm px-6 leading-relaxed opacity-80"
-                style={{ color: autoTextColor }}
+                style={{ color: textColor }}
               >
                 {user.bio}
               </p>
@@ -360,7 +368,7 @@ END:VCARD`;
                 target={link.type === 'email' || link.type === 'phone' ? '_self' : '_blank'}
                 rel="noopener noreferrer"
                 className="transition-colors opacity-80 hover:opacity-100"
-                style={{ color: autoTextColor }}
+                style={{ color: textColor }}
                 onClick={() => handleLinkClick(link)}
               >
                 {getPlatformIcon(link.platform || '', link.type)}
@@ -390,7 +398,7 @@ END:VCARD`;
                   {/* الأيقونة على اليمين */}
                   <div 
                     className="opacity-90"
-                    style={{ color: autoTextColor }}
+                    style={{ color: textColor }}
                   >
                     {getPlatformIcon(link.platform || '', link.type)}
                   </div>
@@ -399,7 +407,7 @@ END:VCARD`;
                   <div className="flex-1 text-center">
                     <span 
                       className="font-medium text-base"
-                      style={{ color: autoTextColor }}
+                      style={{ color: textColor }}
                     >
                       {link.title}
                     </span>
@@ -435,7 +443,7 @@ END:VCARD`;
           >
             <span 
               className="font-medium text-center"
-              style={{ color: autoTextColor, opacity: 0.9 }}
+              style={{ color: textColor, opacity: 0.9 }}
             >
               ⚡ إذا أعجبك الكارد اطلبه من هنا ⚡
             </span>
@@ -447,7 +455,7 @@ END:VCARD`;
       <div className="px-6 pb-6">
         <button 
           className="text-sm transition-colors opacity-40 hover:opacity-60"
-          style={{ color: autoTextColor }}
+          style={{ color: textColor }}
         >
           Cookie Preferences
         </button>
@@ -461,7 +469,7 @@ END:VCARD`;
             size="sm"
             onClick={downloadVCard}
             className="flex-1 bg-white/20 backdrop-blur-sm border-white/20 hover:bg-white/30"
-            style={{ color: autoTextColor }}
+            style={{ color: textColor }}
           >
             <Download className="h-4 w-4 ml-2" />
             حفظ جهة اتصال
@@ -472,7 +480,7 @@ END:VCARD`;
             size="sm"
             onClick={shareProfile}
             className="flex-1 bg-white/20 backdrop-blur-sm border-white/20 hover:bg-white/30"
-            style={{ color: autoTextColor }}
+            style={{ color: textColor }}
           >
             <Share2 className="h-4 w-4 ml-2" />
             مشاركة
