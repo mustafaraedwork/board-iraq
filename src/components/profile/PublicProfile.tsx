@@ -1,4 +1,4 @@
-// src/components/profile/PublicProfile.tsx - محدث مع إصلاح لون النص
+// src/components/profile/PublicProfile.tsx - إصلاح عرض الصور من Storage
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -66,6 +66,33 @@ const getPlatformIcon = (platform: string, type: string) => {
   }
 };
 
+// 🔥 دالة معالجة URL الصور من Supabase Storage
+const getProfileImageUrl = (user: User): string | null => {
+  if (!user.profile_image_url) {
+    return null;
+  }
+
+  // إذا كانت الصورة base64 (النظام القديم)
+  if (user.profile_image_url.startsWith('data:')) {
+    return user.profile_image_url;
+  }
+
+  // إذا كانت URL كاملة من Supabase Storage (النظام الجديد)
+  if (user.profile_image_url.startsWith('https://')) {
+    return user.profile_image_url;
+  }
+
+  // إذا كانت مجرد اسم ملف، بناء URL كامل
+  if (user.profile_image_url.includes('profiles/')) {
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://icqvknhbhnsllnkpajmo.supabase.co';
+    return `${supabaseUrl}/storage/v1/object/public/profile-images/${user.profile_image_url}`;
+  }
+
+  // إذا كان اسم ملف فقط، بناء المسار الكامل
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://icqvknhbhnsllnkpajmo.supabase.co';
+  return `${supabaseUrl}/storage/v1/object/public/profile-images/profiles/${user.profile_image_url}`;
+};
+
 // 🔥 إصلاح دالة تحديد لون النص - أعطي الأولوية لـ user.text_color
 const getTextColor = (user: User): string => {
   // 🎯 إذا كان المستخدم حدد لون نص مخصص، استخدمه مباشرة
@@ -131,6 +158,7 @@ const formatUrl = (url: string, type: string, platform?: string): string => {
 export default function PublicProfile({ user, links }: PublicProfileProps) {
   const [isClient, setIsClient] = useState(false);
   const [visitCount, setVisitCount] = useState(user.total_visits || 0);
+  const [imageError, setImageError] = useState(false); // 🔥 تتبع أخطاء تحميل الصور
 
   // تفعيل Facebook Hooks
   const trackViewContent = useFacebookViewContent();
@@ -142,6 +170,9 @@ export default function PublicProfile({ user, links }: PublicProfileProps) {
 
   // 🔥 استخدام الدالة المحدثة لتحديد لون النص
   const textColor = getTextColor(user);
+  
+  // 🔥 الحصول على URL الصورة الصحيح
+  const profileImageUrl = getProfileImageUrl(user);
 
   // تتبع ViewContent عند زيارة البطاقة
   useEffect(() => {
@@ -266,6 +297,12 @@ END:VCARD`;
     });
   };
 
+  // 🔥 معالجة أخطاء تحميل الصور
+  const handleImageError = () => {
+    console.warn('فشل في تحميل الصورة الشخصية:', profileImageUrl);
+    setImageError(true);
+  };
+
   return (
     <div 
       className="min-h-screen flex flex-col"
@@ -296,15 +333,17 @@ END:VCARD`;
             </button>
           </div>
 
-          {/* الصورة الشخصية الدائرية */}
+          {/* الصورة الشخصية الدائرية - 🔥 محدثة لدعم Storage */}
           <div className="flex flex-col items-center pt-16 pb-8">
             <div className="relative">
-              {user.profile_image_url ? (
+              {profileImageUrl && !imageError ? (
                 <img
-                  src={user.profile_image_url}
+                  src={profileImageUrl}
                   alt={user.full_name || user.username}
                   className="w-32 h-32 rounded-full object-cover border-4"
                   style={{ borderColor: `${textColor}33` }}
+                  onError={handleImageError}
+                  onLoad={() => console.log('تم تحميل الصورة بنجاح:', profileImageUrl)}
                 />
               ) : (
                 <div 
