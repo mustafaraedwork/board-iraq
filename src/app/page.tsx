@@ -126,7 +126,7 @@ export default function HomePage() {
       description: "اختر التصميم واطلب بطاقتك عبر متجرنا الإلكتروني"
     },
     {
-      step: "2", 
+      step: "2",
       title: "خصص صفحتك",
       description: "سجل دخول وأضف معلوماتك وروابطك وخصص التصميم"
     },
@@ -134,6 +134,41 @@ export default function HomePage() {
       step: "3",
       title: "شارك بسهولة",
       description: "استخدم البطاقة أو كود QR لمشاركة معلوماتك فوراً"
+    }
+  ];
+
+  const testimonials = [
+    {
+      name: "أحمد محمد",
+      role: "مدير تسويق",
+      company: "شركة النجاح",
+      image: "👨‍💼",
+      rating: 5,
+      text: "بطاقة رائعة وعملية جداً! سهلت علي مشاركة معلوماتي في المؤتمرات والفعاليات."
+    },
+    {
+      name: "سارة علي",
+      role: "مصممة جرافيك",
+      company: "استوديو الإبداع",
+      image: "👩‍💻",
+      rating: 5,
+      text: "التصميم احترافي والتقنية سريعة. عملائي يحبون سهولة الوصول لأعمالي."
+    },
+    {
+      name: "عمر حسين",
+      role: "رجل أعمال",
+      company: "مجموعة الخليج",
+      image: "👔",
+      rating: 5,
+      text: "استثمار ممتاز! البطاقة تركت انطباعاً مميزاً لدى شركائي في العمل."
+    },
+    {
+      name: "فاطمة كريم",
+      role: "مدربة تطوير",
+      company: "أكاديمية المستقبل",
+      image: "👩‍🏫",
+      rating: 5,
+      text: "أداة عصرية لا غنى عنها لكل محترف. التواصل أصبح أسهل بكثير."
     }
   ];
 
@@ -179,12 +214,17 @@ export default function HomePage() {
         </div>
       </header>
 
-      {/* Hero Section */}
+      {/* Hero Section - محسّن مع animations */}
       <section className="relative overflow-hidden py-20 lg:py-32">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Gradient Background Animation */}
+        <div className="absolute inset-0 opacity-10 animate-gradient" style={{
+          background: 'linear-gradient(135deg, #D97757 0%, #a8563f 50%, #8b4332 100%)'
+        }}></div>
+
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center">
-            <Badge 
-              className="mb-6 px-4 py-2 text-white border-0"
+            <Badge
+              className="mb-6 px-4 py-2 text-white border-0 animate-fade-in hover-lift"
               style={{ backgroundColor: '#D97757' }}
             >
               <Star className="h-4 w-4 ml-1" />
@@ -192,19 +232,19 @@ export default function HomePage() {
             </Badge>
             
             {/* Logo كبير في Hero Section */}
-            <div className="mb-8 flex justify-center">
-              <Image 
-                src="/logo.svg" 
-                alt="Board Iraq" 
+            <div className="mb-8 flex justify-center animate-scale-in">
+              <Image
+                src="/logo.svg"
+                alt="Board Iraq"
                 width={112}
                 height={112}
-                className="h-20 md:h-28 w-auto opacity-90"
+                className="h-20 md:h-28 w-auto opacity-90 animate-pulse-subtle"
               />
             </div>
-            
-            <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight" style={{ color: '#141413' }}>
-              بطاقات ذكية 
-              <span className="block" style={{ color: '#D97757' }}>
+
+            <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight animate-fade-in" style={{ color: '#141413', animationDelay: '0.1s' }}>
+              بطاقات ذكية
+              <span className="block animate-slide-in-right" style={{ color: '#D97757', animationDelay: '0.3s' }}>
                 لمستقبل الأعمال
               </span>
             </h1>
@@ -214,22 +254,25 @@ export default function HomePage() {
               شارك جميع معلوماتك وروابطك بلمسة واحدة فقط.
             </p>
             
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-16">
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-16 animate-fade-in" style={{ animationDelay: '0.5s' }}>
               <Link
                 href="/order"
-                className="px-8 py-4 rounded-xl text-lg font-semibold transition-all transform hover:scale-105 text-white shadow-lg"
+                className="px-8 py-4 rounded-xl text-lg font-semibold transition-smooth hover-lift text-white shadow-lg relative overflow-hidden group"
                 style={{ backgroundColor: '#D97757' }}
                 onClick={handleOrderClick}
               >
-                اطلب بطاقتك الآن
-                <ArrowRight className="h-5 w-5 mr-2 inline" />
+                <span className="relative z-10">
+                  اطلب بطاقتك الآن
+                  <ArrowRight className="h-5 w-5 mr-2 inline" />
+                </span>
+                <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-10 transition-opacity"></div>
               </Link>
-              
+
               <Link
                 href="/mustafa"
-                className="px-8 py-4 rounded-xl text-lg font-semibold border-2 transition-all transform hover:scale-105"
-                style={{ 
-                  borderColor: '#D97757', 
+                className="px-8 py-4 rounded-xl text-lg font-semibold border-2 transition-smooth hover-lift relative overflow-hidden group"
+                style={{
+                  borderColor: '#D97757',
                   color: '#D97757',
                   backgroundColor: 'transparent'
                 }}
@@ -237,6 +280,7 @@ export default function HomePage() {
               >
                 <Eye className="h-5 w-5 ml-2 inline" />
                 شاهد المعاينة
+                <div className="absolute inset-0 opacity-0 group-hover:opacity-5 transition-opacity" style={{ backgroundColor: '#D97757' }}></div>
               </Link>
             </div>
 
@@ -257,10 +301,10 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Features Section */}
-      <section className="py-20" style={{ backgroundColor: 'rgba(217, 151, 87, 0.05)' }}>
+      {/* Features Section - محسّن */}
+      <section className="py-20 relative" style={{ backgroundColor: 'rgba(217, 151, 87, 0.05)' }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
+          <div className="text-center mb-16 animate-fade-in">
             <h2 className="text-3xl md:text-4xl font-bold mb-4" style={{ color: '#141413' }}>
               لماذا تختار بطاقاتنا الذكية؟
             </h2>
@@ -271,17 +315,20 @@ export default function HomePage() {
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
             {features.map((feature, index) => (
-              <Card 
-                key={index} 
-                className="text-center p-6 border-0 shadow-lg transition-all hover:shadow-xl hover:scale-105 cursor-pointer" 
-                style={{ backgroundColor: 'white' }}
+              <Card
+                key={index}
+                className="text-center p-6 border-0 shadow-lg transition-smooth hover-lift cursor-pointer animate-fade-in group"
+                style={{
+                  backgroundColor: 'white',
+                  animationDelay: `${index * 0.1}s`
+                }}
                 onClick={() => trackAddToWishlist({
                   content_name: `اهتمام بـ ${feature.title}`,
                   engagement_score: 6
                 })}
               >
                 <CardContent className="p-0">
-                  <div className="mb-4 flex justify-center">
+                  <div className="mb-4 flex justify-center transform group-hover:scale-110 transition-transform duration-300">
                     {feature.icon}
                   </div>
                   <h3 className="text-xl font-semibold mb-3" style={{ color: '#141413' }}>
@@ -330,8 +377,114 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Social Platforms */}
+      {/* Testimonials Section - جديد */}
       <section className="py-20" style={{ backgroundColor: 'rgba(217, 151, 87, 0.05)' }}>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16 animate-fade-in">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4" style={{ color: '#141413' }}>
+              آراء عملائنا
+            </h2>
+            <p className="text-lg max-w-2xl mx-auto" style={{ color: '#141413', opacity: 0.7 }}>
+              اكتشف تجارب عملائنا مع البطاقات الذكية
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {testimonials.map((testimonial, index) => (
+              <Card
+                key={index}
+                className="border-0 shadow-lg transition-smooth hover-lift animate-fade-in"
+                style={{
+                  backgroundColor: 'white',
+                  animationDelay: `${index * 0.1}s`
+                }}
+              >
+                <CardContent className="p-6">
+                  {/* الصورة والتقييم */}
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="flex items-center space-x-3 space-x-reverse">
+                      <div
+                        className="w-12 h-12 rounded-full flex items-center justify-center text-2xl"
+                        style={{ backgroundColor: 'rgba(217, 151, 87, 0.1)' }}
+                      >
+                        {testimonial.image}
+                      </div>
+                      <div>
+                        <h4 className="font-semibold" style={{ color: '#141413' }}>
+                          {testimonial.name}
+                        </h4>
+                        <p className="text-sm" style={{ color: '#141413', opacity: 0.6 }}>
+                          {testimonial.role}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* النجوم */}
+                  <div className="flex mb-3">
+                    {[...Array(testimonial.rating)].map((_, i) => (
+                      <Star
+                        key={i}
+                        className="h-4 w-4 fill-current"
+                        style={{ color: '#fbbf24' }}
+                      />
+                    ))}
+                  </div>
+
+                  {/* النص */}
+                  <p className="text-sm leading-relaxed mb-3" style={{ color: '#141413', opacity: 0.7 }}>
+                    "{testimonial.text}"
+                  </p>
+
+                  {/* الشركة */}
+                  <p className="text-xs font-medium" style={{ color: '#D97757' }}>
+                    {testimonial.company}
+                  </p>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+
+          {/* إحصائيات سريعة */}
+          <div className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-6 animate-fade-in" style={{ animationDelay: '0.6s' }}>
+            <div className="text-center">
+              <div className="text-4xl font-bold mb-2" style={{ color: '#D97757' }}>
+                4000+
+              </div>
+              <div className="text-sm" style={{ color: '#141413', opacity: 0.7 }}>
+                عميل سعيد
+              </div>
+            </div>
+            <div className="text-center">
+              <div className="text-4xl font-bold mb-2" style={{ color: '#10b981' }}>
+                98%
+              </div>
+              <div className="text-sm" style={{ color: '#141413', opacity: 0.7 }}>
+                رضا العملاء
+              </div>
+            </div>
+            <div className="text-center">
+              <div className="text-4xl font-bold mb-2" style={{ color: '#3b82f6' }}>
+                24/7
+              </div>
+              <div className="text-sm" style={{ color: '#141413', opacity: 0.7 }}>
+                دعم فني
+              </div>
+            </div>
+            <div className="text-center">
+              <div className="text-4xl font-bold mb-2" style={{ color: '#8b5cf6' }}>
+                2+
+              </div>
+              <div className="text-sm" style={{ color: '#141413', opacity: 0.7 }}>
+                سنوات خبرة
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Social Platforms */}
+      <section className="py-20" style={{ backgroundColor: 'transparent' }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold mb-4" style={{ color: '#141413' }}>

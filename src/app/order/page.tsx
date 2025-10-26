@@ -283,22 +283,22 @@ export default function OrderPage() {
     >
       <div className="max-w-4xl mx-auto">
         
-        {/* Header */}
-        <div className="text-center mb-8">
-          <div className="flex justify-center mb-4">
-            <img 
-              src="/logo.svg" 
-              alt="Board Iraq Logo" 
+        {/* Header - محسّن */}
+        <div className="text-center mb-8 animate-fade-in">
+          <div className="flex justify-center mb-4 animate-scale-in">
+            <img
+              src="/logo.svg"
+              alt="Board Iraq Logo"
               className="h-16 w-auto"
             />
           </div>
-          <h1 
-            className="text-3xl font-bold mb-2"
-            style={{ color: '#141413' }}
+          <h1
+            className="text-3xl font-bold mb-2 animate-fade-in"
+            style={{ color: '#141413', animationDelay: '0.1s' }}
           >
             اطلب بطاقتك الآن
           </h1>
-          <p style={{ color: '#141413', opacity: 0.7 }}>
+          <p className="animate-fade-in" style={{ color: '#141413', opacity: 0.7, animationDelay: '0.2s' }}>
             احصل على بطاقتك الذكية وشارك معلوماتك بسهولة
           </p>
         </div>
@@ -321,10 +321,10 @@ export default function OrderPage() {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           
-          {/* صورة الكارد */}
-          <div className="order-2 lg:order-1">
-            <div 
-              className="rounded-2xl shadow-xl p-6 border-0"
+          {/* صورة الكارد - محسّنة */}
+          <div className="order-2 lg:order-1 animate-fade-in" style={{ animationDelay: '0.3s' }}>
+            <div
+              className="rounded-2xl shadow-xl p-6 border-0 transition-smooth hover-lift"
               style={{ backgroundColor: 'rgba(255, 255, 255, 0.95)' }}
             >
               <h3 
@@ -404,10 +404,10 @@ export default function OrderPage() {
             </div>
           </div>
 
-          {/* نموذج الطلب */}
-          <div className="order-1 lg:order-2">
-            <div 
-              className="rounded-2xl shadow-xl p-6 border-0"
+          {/* نموذج الطلب - محسّن */}
+          <div className="order-1 lg:order-2 animate-fade-in" style={{ animationDelay: '0.4s' }}>
+            <div
+              className="rounded-2xl shadow-xl p-6 border-0 transition-smooth"
               style={{ backgroundColor: 'rgba(255, 255, 255, 0.95)' }}
             >
               <h3 
@@ -589,11 +589,11 @@ export default function OrderPage() {
                   </div>
                 </div>
 
-                {/* زر الطلب */}
+                {/* زر الطلب - محسّن */}
                 <button
                   onClick={handleSubmit}
                   disabled={isSubmitting}
-                  className="w-full text-white py-4 rounded-xl font-bold text-lg hover:opacity-90 transform hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full text-white py-4 rounded-xl font-bold text-lg transition-smooth hover-lift disabled:opacity-50 disabled:cursor-not-allowed relative overflow-hidden group"
                   style={{ backgroundColor: '#D97757' }}
                 >
                   {isSubmitting ? (

@@ -159,6 +159,8 @@ export default function PublicProfile({ user, links }: PublicProfileProps) {
   const [isClient, setIsClient] = useState(false);
   const [visitCount, setVisitCount] = useState(user.total_visits || 0);
   const [imageError, setImageError] = useState(false); // 🔥 تتبع أخطاء تحميل الصور
+  const [imageLoading, setImageLoading] = useState(true); // Loading state للصورة
+  const [isVisible, setIsVisible] = useState(false); // للـ animations
 
   // تفعيل Facebook Hooks
   const trackViewContent = useFacebookViewContent();
@@ -188,6 +190,10 @@ export default function PublicProfile({ user, links }: PublicProfileProps) {
 
   useEffect(() => {
     setIsClient(true);
+
+    // تفعيل animations
+    setTimeout(() => setIsVisible(true), 100);
+
     // تسجيل الزيارة
     const updateVisitCount = async () => {
       try {
@@ -201,7 +207,7 @@ export default function PublicProfile({ user, links }: PublicProfileProps) {
             referrer: document.referrer,
           }),
         });
-        
+
         if (response.ok) {
           setVisitCount(prev => prev + 1);
         }
@@ -301,6 +307,12 @@ END:VCARD`;
   const handleImageError = () => {
     console.warn('فشل في تحميل الصورة الشخصية:', profileImageUrl);
     setImageError(true);
+    setImageLoading(false);
+  };
+
+  const handleImageLoad = () => {
+    console.log('تم تحميل الصورة بنجاح:', profileImageUrl);
+    setImageLoading(false);
   };
 
   return (
@@ -333,23 +345,31 @@ END:VCARD`;
             </button>
           </div>
 
-          {/* الصورة الشخصية الدائرية - 🔥 محدثة لدعم Storage */}
-          <div className="flex flex-col items-center pt-16 pb-8">
+          {/* الصورة الشخصية الدائرية - 🔥 محسّنة مع loading state */}
+          <div className={`flex flex-col items-center pt-16 pb-8 transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
             <div className="relative">
+              {/* Loading skeleton */}
+              {imageLoading && profileImageUrl && !imageError && (
+                <div
+                  className="absolute inset-0 w-32 h-32 rounded-full animate-pulse"
+                  style={{ backgroundColor: 'rgba(217, 151, 87, 0.2)' }}
+                ></div>
+              )}
+
               {profileImageUrl && !imageError ? (
                 <img
                   src={profileImageUrl}
                   alt={user.full_name || user.username}
-                  className="w-32 h-32 rounded-full object-cover border-4"
+                  className={`w-32 h-32 rounded-full object-cover border-4 transition-all duration-500 ${imageLoading ? 'opacity-0' : 'opacity-100 hover:scale-105'}`}
                   style={{ borderColor: `${textColor}33` }}
                   onError={handleImageError}
-                  onLoad={() => console.log('تم تحميل الصورة بنجاح:', profileImageUrl)}
+                  onLoad={handleImageLoad}
                 />
               ) : (
-                <div 
-                  className="w-32 h-32 rounded-full flex items-center justify-center text-4xl font-bold border-4"
+                <div
+                  className="w-32 h-32 rounded-full flex items-center justify-center text-4xl font-bold border-4 animate-scale-in hover:scale-105 transition-transform duration-300"
                   style={{
-                    background: 'linear-gradient(135deg, #a8e6cf 0%, #88c999 50%, #4caf50 100%)',
+                    background: 'linear-gradient(135deg, #D97757 0%, #a8563f 50%, #8b4332 100%)',
                     borderColor: `${textColor}33`,
                     color: '#ffffff'
                   }}
@@ -359,39 +379,39 @@ END:VCARD`;
               )}
             </div>
 
-            {/* اسم الكامل - 🔥 تطبيق لون النص المخصص */}
-            <h1 
-              className="text-2xl font-semibold mt-6 mb-2"
-              style={{ color: textColor }}
+            {/* اسم الكامل - محسّن مع animation */}
+            <h1
+              className={`text-2xl font-semibold mt-6 mb-2 transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5'}`}
+              style={{ color: textColor, transitionDelay: '0.1s' }}
             >
               {user.full_name || user.username}
             </h1>
 
-            {/* المسمى الوظيفي - 🔥 تطبيق لون النص المخصص */}
+            {/* المسمى الوظيفي - محسّن مع animation */}
             {user.job_title && (
-              <p 
-                className="text-lg opacity-90 mb-1"
-                style={{ color: textColor }}
+              <p
+                className={`text-lg opacity-90 mb-1 transition-all duration-700 ${isVisible ? 'opacity-90 translate-y-0' : 'opacity-0 translate-y-5'}`}
+                style={{ color: textColor, transitionDelay: '0.2s' }}
               >
                 {user.job_title}
               </p>
             )}
 
-            {/* اسم الشركة - 🔥 تطبيق لون النص المخصص */}
+            {/* اسم الشركة - محسّن مع animation */}
             {user.company && (
-              <p 
-                className="text-base font-medium opacity-80 mb-4"
-                style={{ color: textColor }}
+              <p
+                className={`text-base font-medium opacity-80 mb-4 transition-all duration-700 ${isVisible ? 'opacity-80 translate-y-0' : 'opacity-0 translate-y-5'}`}
+                style={{ color: textColor, transitionDelay: '0.3s' }}
               >
                 {user.company}
               </p>
             )}
 
-            {/* الوصف - 🔥 تطبيق لون النص المخصص */}
+            {/* الوصف - محسّن مع animation */}
             {user.bio && (
-              <p 
-                className="text-center max-w-sm px-6 leading-relaxed opacity-80"
-                style={{ color: textColor }}
+              <p
+                className={`text-center max-w-sm px-6 leading-relaxed opacity-80 transition-all duration-700 ${isVisible ? 'opacity-80 translate-y-0' : 'opacity-0 translate-y-5'}`}
+                style={{ color: textColor, transitionDelay: '0.4s' }}
               >
                 {user.bio}
               </p>
@@ -416,7 +436,7 @@ END:VCARD`;
           </div>
         </div>
 
-        {/* قائمة الروابط - محدثة مع النص في المنتصف */}
+        {/* قائمة الروابط - محسّنة مع animations */}
         <div className="px-6 pb-8">
           <div className="space-y-4">
             {links.map((link, index) => (
@@ -426,25 +446,29 @@ END:VCARD`;
                 target={link.type === 'email' || link.type === 'phone' ? '_self' : '_blank'}
                 rel="noopener noreferrer"
                 onClick={() => handleLinkClick(link)}
-                className="block group"
+                className={`block group transition-all duration-500 ${isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-10'}`}
+                style={{ transitionDelay: `${0.5 + index * 0.1}s` }}
               >
-                <div 
-                  className="flex items-center justify-between px-6 py-4 rounded-2xl transition-all duration-200 group-hover:scale-[1.02] group-active:scale-[0.98]"
+                <div
+                  className="flex items-center justify-between px-6 py-4 rounded-2xl transition-all duration-300 group-hover:scale-[1.03] group-hover:shadow-lg group-active:scale-[0.98] relative overflow-hidden"
                   style={{
                     backgroundColor: user.button_color || '#D97757'
                   }}
                 >
+                  {/* تأثير Ripple */}
+                  <div className="absolute inset-0 bg-white opacity-0 group-hover:opacity-10 transition-opacity duration-300"></div>
+
                   {/* الأيقونة على اليمين */}
-                  <div 
-                    className="opacity-90"
+                  <div
+                    className="opacity-90 transform group-hover:scale-110 transition-transform duration-300 relative z-10"
                     style={{ color: textColor }}
                   >
                     {getPlatformIcon(link.platform || '', link.type)}
                   </div>
 
                   {/* النص في المنتصف */}
-                  <div className="flex-1 text-center">
-                    <span 
+                  <div className="flex-1 text-center relative z-10">
+                    <span
                       className="font-medium text-base"
                       style={{ color: textColor }}
                     >
