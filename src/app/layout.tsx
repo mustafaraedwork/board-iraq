@@ -1,16 +1,7 @@
-// src/app/layout.tsx - محدث مع Facebook Pixel + خط Cairo العربي
+// src/app/layout.tsx - محدث مع Facebook Pixel
 import type { Metadata } from "next";
-import { Cairo } from "next/font/google";
 import "./globals.css";
 import FacebookPixelProvider from "@/components/FacebookPixelProvider";
-
-// خط Cairo العربي الاحترافي
-const cairo = Cairo({
-  subsets: ["arabic", "latin"],
-  variable: "--font-cairo",
-  weight: ["300", "400", "500", "600", "700", "800"],
-  display: "swap",
-});
 
 export const metadata: Metadata = {
   title: "Board Iraq - البطاقات الذكية",
@@ -71,8 +62,7 @@ export default function RootLayout({
         />
       </head>
       <body
-        className={`${cairo.variable} antialiased`}
-        style={{ fontFamily: 'var(--font-cairo), system-ui, -apple-system, sans-serif' }}
+        className="antialiased"
       >
         <FacebookPixelProvider>
           {children}
