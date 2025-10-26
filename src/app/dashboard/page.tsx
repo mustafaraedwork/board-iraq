@@ -450,54 +450,72 @@ export default function DashboardPage() {
       </header>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Stats Cards */}
+        {/* Stats Cards - محسّنة */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          <Card 
-            className="border-0 shadow-md"
-            style={{ backgroundColor: 'rgba(255, 255, 255, 0.9)' }}
+          <Card
+            className="border-0 shadow-lg transition-smooth hover-lift animate-fade-in cursor-pointer"
+            style={{ backgroundColor: 'rgba(255, 255, 255, 0.95)', animationDelay: '0.1s' }}
           >
             <CardContent className="p-6">
               <div className="flex items-center">
-                <div className="flex-shrink-0">
-                  <Users className="h-8 w-8" style={{ color: '#D97757' }} />
+                <div
+                  className="flex-shrink-0 w-14 h-14 rounded-xl flex items-center justify-center transform transition-transform duration-300 hover:scale-110"
+                  style={{
+                    background: 'linear-gradient(135deg, #D97757 0%, #a8563f 100%)'
+                  }}
+                >
+                  <Users className="h-7 w-7 text-white" />
                 </div>
                 <div className="mr-4 flex-1">
                   <p className="text-sm font-medium" style={{ color: '#141413', opacity: 0.7 }}>إجمالي الزيارات</p>
-                  <p className="text-2xl font-bold" style={{ color: '#141413' }}>{user.total_visits}</p>
+                  <p className="text-3xl font-bold" style={{ color: '#141413' }}>{user.total_visits}</p>
+                  <p className="text-xs mt-1" style={{ color: '#10b981' }}>+12% هذا الأسبوع</p>
                 </div>
               </div>
             </CardContent>
           </Card>
 
-          <Card 
-            className="border-0 shadow-md"
-            style={{ backgroundColor: 'rgba(255, 255, 255, 0.9)' }}
+          <Card
+            className="border-0 shadow-lg transition-smooth hover-lift animate-fade-in cursor-pointer"
+            style={{ backgroundColor: 'rgba(255, 255, 255, 0.95)', animationDelay: '0.2s' }}
           >
             <CardContent className="p-6">
               <div className="flex items-center">
-                <div className="flex-shrink-0">
-                  <MousePointer className="h-8 w-8" style={{ color: '#10b981' }} />
+                <div
+                  className="flex-shrink-0 w-14 h-14 rounded-xl flex items-center justify-center transform transition-transform duration-300 hover:scale-110"
+                  style={{
+                    background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)'
+                  }}
+                >
+                  <MousePointer className="h-7 w-7 text-white" />
                 </div>
                 <div className="mr-4 flex-1">
                   <p className="text-sm font-medium" style={{ color: '#141413', opacity: 0.7 }}>إجمالي النقرات</p>
-                  <p className="text-2xl font-bold" style={{ color: '#141413' }}>{user.total_clicks}</p>
+                  <p className="text-3xl font-bold" style={{ color: '#141413' }}>{user.total_clicks}</p>
+                  <p className="text-xs mt-1" style={{ color: '#10b981' }}>+8% هذا الأسبوع</p>
                 </div>
               </div>
             </CardContent>
           </Card>
 
-          <Card 
-            className="border-0 shadow-md"
-            style={{ backgroundColor: 'rgba(255, 255, 255, 0.9)' }}
+          <Card
+            className="border-0 shadow-lg transition-smooth hover-lift animate-fade-in cursor-pointer"
+            style={{ backgroundColor: 'rgba(255, 255, 255, 0.95)', animationDelay: '0.3s' }}
           >
             <CardContent className="p-6">
               <div className="flex items-center">
-                <div className="flex-shrink-0">
-                  <BarChart3 className="h-8 w-8" style={{ color: '#8b5cf6' }} />
+                <div
+                  className="flex-shrink-0 w-14 h-14 rounded-xl flex items-center justify-center transform transition-transform duration-300 hover:scale-110"
+                  style={{
+                    background: 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)'
+                  }}
+                >
+                  <BarChart3 className="h-7 w-7 text-white" />
                 </div>
                 <div className="mr-4 flex-1">
                   <p className="text-sm font-medium" style={{ color: '#141413', opacity: 0.7 }}>عدد الروابط</p>
-                  <p className="text-2xl font-bold" style={{ color: '#141413' }}>{links.length}</p>
+                  <p className="text-3xl font-bold" style={{ color: '#141413' }}>{links.length}</p>
+                  <p className="text-xs mt-1" style={{ color: '#3b82f6' }}>نشط</p>
                 </div>
               </div>
             </CardContent>
@@ -505,21 +523,22 @@ export default function DashboardPage() {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* Profile Card */}
-          <Card 
-            className="border-0 shadow-md"
-            style={{ backgroundColor: 'rgba(255, 255, 255, 0.9)' }}
+          {/* Profile Card - محسّنة */}
+          <Card
+            className="border-0 shadow-lg transition-smooth hover-lift animate-fade-in"
+            style={{ backgroundColor: 'rgba(255, 255, 255, 0.95)', animationDelay: '0.4s' }}
           >
             <CardHeader>
-              <CardTitle 
+              <CardTitle
                 className="flex items-center justify-between"
                 style={{ color: '#141413' }}
               >
                 معلومات الملف الشخصي
-                <Button 
-                  size="sm" 
-                  variant="outline" 
+                <Button
+                  size="sm"
+                  variant="outline"
                   onClick={() => setShowEditProfile(true)}
+                  className="transition-smooth hover:scale-105"
                   style={{ borderColor: '#D97757', color: '#D97757' }}
                 >
                   <Edit className="h-4 w-4 ml-2" />
@@ -529,10 +548,11 @@ export default function DashboardPage() {
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="flex items-center space-x-4 space-x-reverse">
-                <div 
-                  className="w-16 h-16 rounded-full flex items-center justify-center"
-                  style={{ 
-                    background: 'linear-gradient(135deg, #D97757 0%, #a8563f 100%)'
+                <div
+                  className="w-16 h-16 rounded-full flex items-center justify-center transform transition-transform duration-300 hover:scale-110"
+                  style={{
+                    background: 'linear-gradient(135deg, #D97757 0%, #a8563f 100%)',
+                    boxShadow: '0 4px 12px rgba(217, 151, 87, 0.3)'
                   }}
                 >
                   <span className="text-white text-xl font-bold">
@@ -572,10 +592,10 @@ export default function DashboardPage() {
             </CardContent>
           </Card>
 
-          {/* QR Code Card */}
-          <Card 
-            className="border-0 shadow-md"
-            style={{ backgroundColor: 'rgba(255, 255, 255, 0.9)' }}
+          {/* QR Code Card - محسّنة */}
+          <Card
+            className="border-0 shadow-lg transition-smooth hover-lift animate-fade-in"
+            style={{ backgroundColor: 'rgba(255, 255, 255, 0.95)', animationDelay: '0.5s' }}
           >
             <CardHeader>
               <CardTitle 
@@ -587,39 +607,39 @@ export default function DashboardPage() {
               </CardTitle>
             </CardHeader>
             <CardContent className="text-center space-y-4">
-              <div 
-                className="w-48 h-48 border rounded-lg mx-auto flex items-center justify-center p-4"
-                style={{ 
+              <div
+                className="w-48 h-48 border-2 rounded-xl mx-auto flex items-center justify-center p-4 transition-all duration-300 hover:shadow-lg"
+                style={{
                   backgroundColor: 'white',
                   borderColor: 'rgba(217, 151, 87, 0.3)'
                 }}
               >
                 {qrCodeUrl ? (
-                  <Image 
-                    src={qrCodeUrl} 
-                    alt="QR Code" 
+                  <Image
+                    src={qrCodeUrl}
+                    alt="QR Code"
                     width={192}
                     height={192}
-                    className="w-full h-full object-contain" 
+                    className="w-full h-full object-contain transform transition-transform duration-300 hover:scale-105"
                   />
                 ) : (
                   <div className="text-center">
-                    <QrCode className="h-12 w-12 mx-auto mb-2" style={{ color: '#D97757' }} />
+                    <QrCode className="h-12 w-12 mx-auto mb-2 animate-pulse" style={{ color: '#D97757' }} />
                     <p className="text-sm" style={{ color: '#141413', opacity: 0.5 }}>جاري إنشاء الكود...</p>
                   </div>
                 )}
               </div>
               
               <div className="space-y-2">
-                <Button 
-                  className="w-full text-white border-0" 
+                <Button
+                  className="w-full text-white border-0 transition-smooth hover-lift"
                   onClick={downloadQRCode}
                   style={{ backgroundColor: '#D97757' }}
                 >
                   <Download className="h-4 w-4 ml-2" />
                   تحميل كود QR
                 </Button>
-                <p className="text-xs" style={{ color: '#141413', opacity: 0.5 }}>
+                <p className="text-xs text-center" style={{ color: '#141413', opacity: 0.5 }}>
                   هذا هو الكود المطبوع على بطاقتك
                 </p>
               </div>
@@ -627,21 +647,21 @@ export default function DashboardPage() {
           </Card>
         </div>
 
-        {/* Links Section */}
-        <Card 
-          className="mt-8 border-0 shadow-md"
-          style={{ backgroundColor: 'rgba(255, 255, 255, 0.9)' }}
+        {/* Links Section - محسّنة */}
+        <Card
+          className="mt-8 border-0 shadow-lg transition-smooth animate-fade-in"
+          style={{ backgroundColor: 'rgba(255, 255, 255, 0.95)', animationDelay: '0.6s' }}
         >
           <CardHeader>
-            <CardTitle 
+            <CardTitle
               className="flex items-center justify-between"
               style={{ color: '#141413' }}
             >
               الروابط والمعلومات ({links.length})
-              <Button 
-                size="sm" 
+              <Button
+                size="sm"
                 onClick={() => setShowAddForm(true)}
-                className="text-white border-0"
+                className="text-white border-0 transition-smooth hover-lift"
                 style={{ backgroundColor: '#D97757' }}
               >
                 <Plus className="h-4 w-4 ml-2" />
